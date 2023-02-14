@@ -1,0 +1,21 @@
+The time complexity of the program is determined by the time it takes to process each image and the total number of images processed.
+
+The detect_stairs function iterates over all the contours in the image, approximates each contour with a polygon and checks if the polygon has 4 sides. The time complexity of this function is O(N), where N is the number of contours in the image.
+
+The detect_pedestrian_lane function applies Gaussian blur, Canny edge detection, and finds lines in the image using HoughLinesP. The time complexity of the HoughLinesP method is O(nlogn) where n is the number of pixels in the image, but it also depends on the number of lines found in the image, which is usually much lower.
+
+The detect_obstacles function also applies Gaussian blur, Canny edge detection, and finds contours in the image. The time complexity of this function is also O(N), where N is the number of contours in the image.
+
+Overall, the time complexity of the program is O(N) where N is the total number of contours in the image, but it also depends on the number of lines found in the image, which is usually much lower.
+
+It's important to note that the time complexity of the program can be affected by the number of frames captured per second, the resolution of the images, the number of contours found in the image, and the processing power of the BeagleBone Blue board.
+
+Also, please note that this is a rough estimate of the program's time complexity, and it could change based on the specific parameters and inputs.
+
+
+
+It's difficult to give an exact execution time for this program on one image, as it depends on a variety of factors such as the resolution of the image, the number of contours and lines found in the image, the processing power of the Beaglebone Blue board, and the specific parameters used in the functions.
+
+However, as a rough estimate, on an image with a resolution of 1080p, with a moderate number of contours and lines, and with a powerful Beaglebone Blue board, the program could run in a matter of milliseconds.
+
+It's important to note that this is a rough estimate and the actual execution time could vary depending on the specific input image and parameters used. To get a more accurate measurement of the execution time, you could use the time library in Python to measure the execution time of the program with a specific input image.
