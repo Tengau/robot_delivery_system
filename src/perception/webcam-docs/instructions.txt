@@ -12,7 +12,8 @@ pip install opencv-python
 And, if you don't have cv_bridge installed you can install it by running this command:
 
 Copy code
-pip install ros-<rosdistro>-cv-bridge
+sudo apt install python3-pip
+
 
 
 Hope it helps. Let me know if you have any other questions.
