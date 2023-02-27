@@ -3,7 +3,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-from nav_msgs import OccupancyGrid
+from nav_msgs.msg import OccupancyGrid
 
 # width, height, resolution, data
 
@@ -33,10 +33,11 @@ class OccupancyMap:
         self.resolution = resolution
     
     def update(self, angles, distances):
+        self.angles = angles
+        self.distances = distances
         
-        pass()
     
-    def calculate
+   # def calculate
 
     def __str__(self):
         print("Data: ")
@@ -47,8 +48,10 @@ class OccupancyMap:
     height = 0
     resolution = 1
 
-int main():
-    
+def main():
+   current_map = OccupancyMap(10, 10, 1, [0.2, 0.3, 0.4], [0.1, 0.2, 0.3])
+
+   print(current_map)
 
 
 
