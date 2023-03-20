@@ -12,7 +12,6 @@ import rospy
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import OccupancyGrid
 
-
 import math
 from collections import deque
 
@@ -23,13 +22,12 @@ EXTEND_AREA = 1.0
 
 angles = []
 distances = []
-
-    
     
 def bresenham(start, end):
     """
     Implementation of Bresenham's line drawing algorithm
-    See en.wikipedia.org/wiki/Bresenham's_line_algorithm
+    This is basically an algorith tham figures out which boxes
+    in the grid a line passes through
     Bresenham's Line Algorithm
     Produces a np.array from start and end (original from roguebasin.com)
     >>> points1 = bresenham((4, 4), (6, 10))
@@ -197,9 +195,6 @@ def generate_ray_casting_grid_map(ox, oy, xy_resolution, breshen=True):
     return occupancy_map, min_x, max_x, min_y, max_y, xy_resolution
 
 
-
-
-
 def callback(data):
     # print out time taken to send data
     print("received data:")
@@ -220,9 +215,28 @@ def callback(data):
     occupancy_map, min_x, max_x, min_y, max_y, xy_resolution = \
         generate_ray_casting_grid_map(ox, oy, xy_resolution, True)
     xy_res = np.array(occupancy_map).shape
-    
-    
+    #for i in occupancy_map:
+    #    print(i)
+    #print(type(occupancy_map))
+    occupancy_map = (occupancy_map*100).astype(np.int8)
+
+    grid = OccupancyGrid()
+    grid.info.resolution = xy_resolution
+    grid.info.width = xy_res[1]
+    grid.info.height = xy_res[0]
+
+    #print("occupancy map:", occupancy_map, len(occupancy_map))
+    for i in range(xy_res[0]):
+        for j in range(xy_res[1]):
+            grid.data.append(occupancy_map[i][j])
+            #print(occupancy_map[i][j])
+
+   
+
+
+    '''
     # update the gui everytime a new laserscan message is sent
+    #plt.clf()
     plt.figure(1, figsize=(10, 4))
     plt.subplot(122)
     plt.imshow(occupancy_map, cmap="PiYG_r")
@@ -241,12 +255,13 @@ def callback(data):
     plt.ylim((top, bottom))  # rescale y axis, to match the grid orientation
     plt.grid(True)
     plt.show()
-    
+   ''' 
     #return angles, distances
 
 def main():
     rospy.init_node('perception_node', anonymous=True)
     rospy.Subscriber("scan", LaserScan, callback)
+    pub = rospy.Publisher('/map', OccupancyGrid, queue_size = 10)
     rospy.spin()
     
 if __name__ == '__main__':
