@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
-from navigation.srv import gps_converter, gps_converterResponse
+import rospy
+from localization.srv import *
+from nav_msgs.msg import Path
+from geometry_msgs.msg import PoseStamped
 
 #from geopy.geocoders import Nominatim
 import requests
@@ -78,12 +81,52 @@ def gps_find(m):
 # lat2 = get_lat_long_from_address(end_address[0])
 # long2 = get_lat_long_from_address(end_address[1])
 
-response = get_directions_response(43.12674007232403, -77.63006643069292, 43.124816415972354, -77.63061329260651)
-list_of_waypoints = create_coordinate_array(response)
-print(list_of_waypoints)
+#response = get_directions_response(43.12674007232403, -77.63006643069292, 43.124816415972354, -77.63061329260651)
+#list_of_waypoints = create_coordinate_array(response)
+#print(list_of_waypoints)
 #print(get_waypoint_distances_and_set_of_instructions(response))
 #m = create_map(list_of_waypoints)
 #gps_find(m)
 #m.save('./route_map.html')
+
+if __name__ == '__main__':
+    
+    rospy.init_node('navigation_node')
+    path_publisher = rospy.Publisher('path', Path, queue_size=10)
+    
+    response = get_directions_response(43.12674007232403, -77.63006643069292, 43.124816415972354, -77.63061329260651)
+    waypoints = create_coordinate_array(response)
+    
+    path = Path()
+    path.header.stamp = rospy.get_rostime()
+    path.header.frame_id = "world"
+
+    # filling up the list
+    for waypoint in waypoints:
+        rospy.wait_for_service('gps_converter')
+        
+        gps_converter = rospy.ServiceProxy('gps_converter', GpsConverter)
+            
+
+        req = GpsConverterRequest()
+        req.gps.x = waypoint[0]
+        req.gps.y = waypoint[1]
+
+        res = gps_converter(req)
+            
+        pose = PoseStamped()
+        pose.header.stamp = rospy.get_rostime()
+        pose.header.frame_id = "world"
+
+        pose.pose.position.x = res.position.x
+        pose.pose.position.y = res.position.y
+        pose.pose.orientation.w = 1
+
+        path.poses.append(pose)
+        
+    path_publisher.publish(path)
+
+
+
 
 
