@@ -43,10 +43,12 @@ if __name__ == '__main__':
             lon_deg = int(data[4][:3])
             lon_min = float(data[4][3:]) / 60
             
-            point.x =  lat_sig * (lat_deg + lat_min)
-            point.y =  lon_sig * (lon_deg + lon_min)
-            
-            gps_publisher.publish(point)
+            point.x =  lat_sign * (lat_deg + lat_min)
+            point.y =  lon_sign * (lon_deg + lon_min)
+        else:
+            point.z = -1
+        
+        gps_publisher.publish(point)
         rate.sleep()
 
 #while gps.inWaiting()==0:
