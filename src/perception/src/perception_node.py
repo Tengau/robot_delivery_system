@@ -18,6 +18,11 @@ from collections import deque
 import matplotlib.pyplot as plt
 import numpy as np
 
+rospy.init_node('perception_node', anonymous=True)
+pub = rospy.Publisher('/map', OccupancyGrid, queue_size = 10)
+
+
+
 EXTEND_AREA = 1.0
 
 angles = []
@@ -201,7 +206,7 @@ def callback(data):
     # NDArray of angles and distances are collected:
     for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
         if(data.ranges[i] <= data.range_max and data.ranges[i] >= data.range_min): 
-            print(i, ": ", data.range_max, data.ranges[i], data.intensities[i])
+            # print(i, ": ", data.range_max, data.ranges[i], data.intensities[i])
             angles.append(float(i * data.angle_increment))
             distances.append(float(data.ranges[i]))
     
@@ -230,13 +235,12 @@ def callback(data):
         for j in range(xy_res[1]):
             grid.data.append(occupancy_map[i][j])
             #print(occupancy_map[i][j])
-
+    pub.publish(grid)
+    print("occupancy grid is published")
 
 def main():
-    rospy.init_node('perception_node', anonymous=True)
     rospy.Subscriber("scan", LaserScan, callback)
-    pub = rospy.Publisher('/map', OccupancyGrid, queue_size = 10)
     rospy.spin()
-    
+
 if __name__ == '__main__':
     main()
