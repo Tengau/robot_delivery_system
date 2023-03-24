@@ -19,7 +19,7 @@ def get_lat_long_from_address(address):
    return location.latitude, location.longitude
 
 #gets a json file containings directions
-def get_directions_response(lat1, long1, lat2, long2, mode='bicycle'):
+def get_directions_response(lat1, long1, lat2, long2, mode='walk'):
    url = "https://route-and-directions.p.rapidapi.com/v1/routing"
    key = "d683c6f5ffmshf24cc1a7a1f795ep119792jsnefb69665aebd"
    host = "route-and-directions.p.rapidapi.com"
@@ -94,9 +94,11 @@ if __name__ == '__main__':
     rospy.init_node('navigation_node')
     path_publisher = rospy.Publisher('path', Path, queue_size=10)
     
-    response = get_directions_response(43.12674007232403, -77.63006643069292, 43.124816415972354, -77.63061329260651)
+    response = get_directions_response(43.12712, -77.62891, 43.12663, -77.63024)
     waypoints = create_coordinate_array(response)
     
+    print(waypoints)
+
     path = Path()
     path.header.stamp = rospy.get_rostime()
     path.header.frame_id = "world"
@@ -125,8 +127,4 @@ if __name__ == '__main__':
         path.poses.append(pose)
         
     path_publisher.publish(path)
-
-
-
-
 
