@@ -41,7 +41,9 @@ int main(int argc, char **argv)
 	while (ros::ok()) {
 		if (rc_mpu_read_mag(&data))
 			continue;
-		double heading = atan2(data.mag[1],data.mag[0]);		
+		
+		double heading = atan2(data.mag[1],data.mag[0]) * 180 / M_PI;		
+		//double heading = atan2(data.mag[1],data.mag[0]);		
 		
 		std_msgs::Float64 msg;
 		msg.data = heading;
