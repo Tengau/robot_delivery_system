@@ -13,7 +13,9 @@ image_pub = rospy.Publisher('webcam_image', Image, queue_size=1)
 bridge = CvBridge()
 
 # Open a connection to the webcam
-camera = cv2.VideoCapture(0)
+#camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture('/home/tenzi/software/robot_delivery/robot_delivery_system/src/perception/practice_videos/Video.mov')
+
 
 # Set the webcam resolution
 camera.set(3, 1920)
