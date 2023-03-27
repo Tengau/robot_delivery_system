@@ -4,15 +4,16 @@ import rospy
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Point
 from geometry_msgs.msg import PoseStamped
-from geometry_msgs.msg import Orientation
+from geometry_msgs.msg import Quaternion
 from localization.srv import *
+import math
 
 x = 0
 y = 0
 theta = 0 
 
 def handle_compass(msg):
-    theta = msg.data
+    theta = msg.data * math.pi / 180
 
 def handle_gps(msg):
     rospy.wait_for_service('gps_converter')
@@ -25,7 +26,10 @@ def handle_gps(msg):
     y = res.position.y
 
 def get_orientation(theta):
-    pass
+    q = Quaternion()
+    q.w = math.cos(theta)
+    q.z = math.sin(theta)
+    return q
 
 if __name__ == '__main__':
     rospy.init_node("robot_pose")
@@ -40,8 +44,8 @@ if __name__ == '__main__':
         pose.header.stamp = rospy.get_rostime()
         pose.header.frame_id = "world"
 
-        pose.pose.position.x = 0 # change this
-        pose.pose.position.y = 0 # change this 
+        pose.pose.position.x = x # change this
+        pose.pose.position.y = y # change this 
 
         pose.pose.orientation = get_orientation(theta)
         
