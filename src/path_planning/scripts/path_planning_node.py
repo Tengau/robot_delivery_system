@@ -1,18 +1,22 @@
-def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-    
-def listener():
-
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('listener', anonymous=True)
-
-    rospy.Subscriber("chatter", String, callback)
+import rospy
 import math
-from gps_mapping_demo import list_of_waypoints
+
+from nav_masgs.msg import Path
+from geometry_msgs.msg import PoseStamped
+
+list_of_waypoints = []
+compass = 0
+gps_current = 
+
+instructions
+
+def handle_path(msg):
+    for msg.poses
+
+def handle_robot_pose(msg):
+    pass
+
+
 #Given a list of waypoints (x,y cordinates (x, north, y is west)), also have orientation and location of robot (at all times). Move to each next coordinate till end location.
 def angledif(point1, point2):
     #angle between two points
@@ -50,4 +54,9 @@ def move(instructions):
 
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
-    rospy
+    rospy.Subscriber("path", Path, handle_path)
+    rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
+
+    
+
+    rospy.spin()
