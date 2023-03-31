@@ -4,6 +4,8 @@ import rospy
 from localization.srv import *
 from nav_msgs.msg import Path
 from geometry_msgs.msg import PoseStamped
+from localization.msg import Instructions
+from localization.msg import Instruction
 
 #from geopy.geocoders import Nominatim
 import requests
@@ -28,7 +30,6 @@ def get_directions_response(lat1, long1, lat2, long2, mode='walk'):
    response = requests.request("GET", url, headers=headers, params=querystring)
    
    return response
-
 
 def create_coordinate_array(response):
    # use the response
@@ -93,11 +94,24 @@ if __name__ == '__main__':
     
     rospy.init_node('navigation_node')
     path_publisher = rospy.Publisher('path', Path, queue_size=10)
-    
-    response = get_directions_response(43.12712, -77.62891, 43.12663, -77.63024)
+    instructions_publisher = rospy.Publisher('instructions', Instructions, queue_size=10)
+
+    response = get_directions_response( 43.12663, -77.63024, 43.12712, -77.62891)
     waypoints = create_coordinate_array(response)
-    
+    instructions = get_waypoint_distances_and_set_of_instructions(response)
+
     print(waypoints)
+    print(instructions)
+
+    instructions_msg = Instructions()
+
+    for i in instructions:
+        ins = Instruction()
+        ins.from_index = i["from_index"]
+        ins.to_index = i["to_index"]
+        ins.distance = i["distance"]
+        instructions_msg.instructions.append(ins)
+    instructions_publisher.publish(instructions_msg)
 
     path = Path()
     path.header.stamp = rospy.get_rostime()
@@ -109,7 +123,6 @@ if __name__ == '__main__':
         
         gps_converter = rospy.ServiceProxy('gps_converter', GpsConverter)
             
-
         req = GpsConverterRequest()
         req.gps.x = waypoint[0]
         req.gps.y = waypoint[1]

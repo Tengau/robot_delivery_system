@@ -1,17 +1,47 @@
-def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-    
-def listener():
-
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('listener', anonymous=True)
-
-    rospy.Subscriber("chatter", String, callback)
+import rospy
 import math
+import serial
+import Adafruit_BBIO.UART as UART
+
+from nav_masgs.msg import Path
+from geometry_msgs.msg import PoseStamped
+from std_msgs.msg import Float64
+
+    #UART setup 
+    UART.setup("UART5")
+    serial = serial.Serial(port = '/dev/ttyo5', baudrate = 9600 )
+ 
+
+list_of_waypoints = []
+compass = 0 
+gps_current = (0,0)
+
+instructions = []
+
+def handle_compass(msg):
+    global compass
+    compass = msg.data * math.pi / 180
+
+def handle_path(msg):
+    global list_of_waypoints
+    for pose in msg.poses:
+        list_of_waypoints.append((pose.pose.position.x, pose.pose.position.y))
+
+def handle_robot_pose(msg):
+    global gps_current
+    gps_current = (msg.pose.position.x, msg.pose.position.y))
+    
+def handle_instructions(msg):
+    global instructions
+    instructions = msg.instructions 
+    movement(instructions)
+
+def move(v, w):
+    serial.open()
+    command = '!'+ v + '@' + w + '#'
+    serial.write(command.encode('utf-8'))
+    serial.close()
+
 from gps_mapping_demo import list_of_waypoints
 #Given a list of waypoints (x,y cordinates (x, north, y is west)), also have orientation and location of robot (at all times). Move to each next coordinate till end location.
 def angledif(point1, point2):
@@ -27,27 +57,35 @@ def distancedif(point1, point2):
     x2, y2 = point2
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
-def move(instructions):
+def movement(instructions):
     for i in instructions:
         #current_orientation = -1 * compass
         target_angle = angledif(list_of_waypoints[i.from_index], list_of_waypoints[i.to_index])
         angledif = target_angle + compass
         while angledif != 0:
             if angledif < 0:
-                turn right ()
+                move("0","0.2" ) #turn right ()
 
             else:
-                turn left ()
+                move("0", "-0.2") #turn left ()
             angledif = target_angle + compass
-        stop()
-        distance_to_go = distancedif(gps_current, list_of_waypoints[i.from_index])
+        move("0","0")#stop()
+        distance_to_go = distancedif(gps_current, list_of_waypoints[i.to_index])
         #if gps_current is in list of waypoints..
         while distance_to_go != 0:
-            move forward ()
+            move("0.2", "0") #move forward ()
             #think of sleep 
-            distance_to_go = distancedif(gps_current, list_of_waypoints[i.from_index])
-        stop()
+            distance_to_go = distancedif(gps_current, list_of_waypoints[i.to_index])
+        move("0","0")#stop()
+
 
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
-    rospy
+    rospy.Subscriber("path", Path, handle_path)
+    rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
+    rospy.Subscriber("compass", Float64, handle_compass)
+    rospy.Subcriber("instructions", Instructions, handle_instructions)
+   
+    rospy.spin()
+
+

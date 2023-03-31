@@ -14,7 +14,7 @@ theta = 0
 
 def handle_compass(msg):
     global theta
-    theta = msg.data * math.pi / 180
+    theta = -msg.data*math.pi/180
 
 def handle_gps(msg):
     rospy.wait_for_service('gps_converter')
@@ -31,9 +31,8 @@ def handle_gps(msg):
 
 def get_orientation():
     q = Quaternion()
-    q.w = math.cos(theta)
-    q.z = math.sin(theta)
-    print(theta)
+    q.w = math.cos(theta/2)
+    q.z = math.sin(theta/2)
     return q
 
 if __name__ == '__main__':
