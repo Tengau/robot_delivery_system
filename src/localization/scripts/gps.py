@@ -15,8 +15,8 @@ if __name__ == '__main__':
     gps_publisher = rospy.Publisher('gps', Point, queue_size=10)
     
     # setting up UART5
-    UART.setup('UART5')
-    gps = serial.Serial('/dev/ttyO5', 9600)
+    UART.setup('UART1')
+    gps = serial.Serial('/dev/ttyO1', 9600)
     
     # setting up an infinite loop
     rate = rospy.Rate(10) # 10Hz
