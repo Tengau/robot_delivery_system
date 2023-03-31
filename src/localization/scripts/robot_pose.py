@@ -13,6 +13,7 @@ y = 0
 theta = 0 
 
 def handle_compass(msg):
+    global theta
     theta = msg.data * math.pi / 180
 
 def handle_gps(msg):
@@ -22,13 +23,17 @@ def handle_gps(msg):
     req.gps.x = msg.x
     req.gps.y = msg.y
     res = gps_converter(req)
+    
+    global x
+    global y
     x = res.position.x
     y = res.position.y
 
-def get_orientation(theta):
+def get_orientation():
     q = Quaternion()
     q.w = math.cos(theta)
     q.z = math.sin(theta)
+    print(theta)
     return q
 
 if __name__ == '__main__':
@@ -44,10 +49,10 @@ if __name__ == '__main__':
         pose.header.stamp = rospy.get_rostime()
         pose.header.frame_id = "world"
 
-        pose.pose.position.x = x # change this
-        pose.pose.position.y = y # change this 
+        pose.pose.position.x = x
+        pose.pose.position.y = y 
 
-        pose.pose.orientation = get_orientation(theta)
+        pose.pose.orientation = get_orientation()
         
         robot_pose_publisher.publish(pose)
         rate.sleep()
