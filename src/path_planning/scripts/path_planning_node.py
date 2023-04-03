@@ -65,8 +65,8 @@ def movement(instructions):
         #current_orientation = -1 * compass
         target_angle = angledif(list_of_waypoints[i.from_index], list_of_waypoints[i.to_index])
         angledifference = target_angle + compass
-        while angledifference < -2 or angledifference > 2:
-            print(angledifference)
+        while angledifference < -0.2 or angledifference > 0.2:
+            print("angle diff:", angledifference*180/math.pi)
             if angledifference < 0:
                 move("0","0.2" ) #turn right ()
 
@@ -76,8 +76,8 @@ def movement(instructions):
         move("0","0")#stop()
         distance_to_go = distancedif(gps_current, list_of_waypoints[i.to_index])
         #if gps_current is in list of waypoints..
-        while distance_to_go != 0:
-            print(distance_to_go)
+        while distance_to_go > 0.1:
+            print("distance to go:", distance_to_go)
             move("0.2", "0") #move forward ()
             #think of sleep 
             distance_to_go = distancedif(gps_current, list_of_waypoints[i.to_index])
