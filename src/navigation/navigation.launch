@@ -1,6 +1,6 @@
 <launch>
- 	<param/>
-	<param/>
+ 	<param name="latitude" value="43.12712"/>
+	<param name="longitude" value="-77.62891"/>
 	
 	<node type="compass" name="compass_node" pkg="localization" output="screen"/> 
 	<node type="robot_pose.py" name="robot_pose_node" pkg="localization" output="screen"/>
