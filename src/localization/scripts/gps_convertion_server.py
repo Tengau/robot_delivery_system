@@ -7,7 +7,7 @@ from geographiclib.geodesic import Geodesic
 
 def convert(req):
     
-    geodesic = Geodesic.WGS84.Inverse(43.12674007232403, -77.63006643069292, req.gps.x, req.gps.y)
+    geodesic = Geodesic.WGS84.Inverse(43.12663, -77.63024, req.gps.x, req.gps.y)
     distance = geodesic["s12"]
     bearing = geodesic["azi1"]
         
