@@ -16,14 +16,23 @@ UART.setup("UART5")
 serial = serial.Serial(port = '/dev/ttyO5', baudrate = 9600 )
 
 list_of_waypoints = []
-compass = 0 
+
+compass_readings = [0,0,0,0,0,0,0,0,0,0] 
+compass = 0
+
 gps_current = (0,0)
 
 instructions = []
 
+count = 0
+
 def handle_compass(msg):
     global compass
-    compass = msg.data * math.pi / 180
+    global count
+    compass =  msg.data
+    compass_readings[count] = compass
+    count = count + 1
+    count = count % 10
 
 def handle_path(msg):
     global list_of_waypoints
@@ -51,7 +60,7 @@ def angledif(point1, point2):
     #angle between two points
     x1, y1 = point1
     x2, y2 = point2
-    angle = math.atan2(y2 - y1, x2 - x1)
+    angle = math.atan2(y2 - y1, x2 - x1) * 180 / math.pi
     return angle
     
 def distancedif(point1, point2):
@@ -64,16 +73,27 @@ def movement(instructions):
     for i in instructions:
         #current_orientation = -1 * compass
         target_angle = angledif(list_of_waypoints[i.from_index], list_of_waypoints[i.to_index])
-        angledifference = target_angle + compass
-        while angledifference < -0.2 or angledifference > 0.2:
-            print("angle diff:", angledifference*180/math.pi)
+        angledifference = target_angle + sum(compass_readings)/len(compass_readings) 
+        #angledifference = target_angle + compass
+        
+        while angledifference < -2 or angledifference > 2:
+            
+            print("angle diff:", angledifference)
+            #print("compass:", compass)
+            print("avg compass:", sum(compass_readings)/len(compass_readings))
+            
             if angledifference < 0:
                 move("0","0.2" ) #turn right ()
 
             else:
                 move("0", "-0.2") #turn left ()
-            angledifference = target_angle + compass
-        move("0","0")#stop()
+                
+            while count != 0:
+                continue
+            angledifference = target_angle + sum(compass_readings)/len(compass_readings)      
+            
+            #angledifference = target_angle + compass      
+            move("0","0")#stop()
         distance_to_go = distancedif(gps_current, list_of_waypoints[i.to_index])
         #if gps_current is in list of waypoints..
         while distance_to_go > 0.1:
