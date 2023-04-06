@@ -45,10 +45,8 @@ if __name__ == '__main__':
             
             point.x =  lat_sign * (lat_deg + lat_min)
             point.y =  lon_sign * (lon_deg + lon_min)
-        else:
-            point.z = -1
-        
-        gps_publisher.publish(point)
+            
+            gps_publisher.publish(point)
         rate.sleep()
 
 #while gps.inWaiting()==0:
