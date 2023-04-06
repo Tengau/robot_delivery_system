@@ -12,27 +12,24 @@ import rospy
 from sensor_msgs.msg import LaserScan
 from nav_msgs.msg import OccupancyGrid
 
+
 import math
 from collections import deque
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-rospy.init_node('perception_node', anonymous=True)
-pub = rospy.Publisher('/map', OccupancyGrid, queue_size = 10)
-
-
-
 EXTEND_AREA = 1.0
 
 angles = []
 distances = []
+
+    
     
 def bresenham(start, end):
     """
     Implementation of Bresenham's line drawing algorithm
-    This is basically an algorith tham figures out which boxes
-    in the grid a line passes through
+    See en.wikipedia.org/wiki/Bresenham's_line_algorithm
     Bresenham's Line Algorithm
     Produces a np.array from start and end (original from roguebasin.com)
     >>> points1 = bresenham((4, 4), (6, 10))
@@ -161,17 +158,12 @@ def generate_ray_casting_grid_map(ox, oy, xy_resolution, breshen=True):
     The breshen boolean tells if it's computed with bresenham ray casting
     (True) or with flood fill (False)
     """
-
-    
     min_x, min_y, max_x, max_y, x_w, y_w = calc_grid_map_config(
         ox, oy, xy_resolution)
     # default 0.5 -- [[0.5 for i in range(y_w)] for i in range(x_w)]
     occupancy_map = np.ones((x_w, y_w)) / 2
     center_x = int( round(-min_x / xy_resolution) )  # center x coordinate of the grid map
     center_y = int( round(-min_y / xy_resolution) )  # center y coordinate of the grid map
-    
-    print("ox and oy:", center_x, center_y)
-
     # occupancy grid computed with bresenham ray casting
     if breshen:
         for (x, y) in zip(ox, oy):
@@ -202,15 +194,11 @@ def generate_ray_casting_grid_map(ox, oy, xy_resolution, breshen=True):
             occupancy_map[ix + 1][iy] = 1.0  # extend the occupied area
             occupancy_map[ix][iy + 1] = 1.0  # extend the occupied area
             occupancy_map[ix + 1][iy + 1] = 1.0  # extend the occupied area
-    return occupancy_map, min_x, max_x, min_y, max_y, xy_resolution, center_x, center_y
-
-def row_to_x(map_width, row, resolution):
-    return( resolution*( -( ( map_width ) - 1 ) /2.0 + row ) )
-
-def col_to_y(map_height, col, resolution):
-    return (resolution*( -( ( map_height ) - 1 ) /2.0 + col ) )
+    return occupancy_map, min_x, max_x, min_y, max_y, xy_resolution
 
 
+
+first = True
 
 def callback(data):
     # print out time taken to send data
@@ -218,7 +206,7 @@ def callback(data):
     # NDArray of angles and distances are collected:
     for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
         if(data.ranges[i] <= data.range_max and data.ranges[i] >= data.range_min): 
-            # print(i, ": ", data.range_max, data.ranges[i], data.intensities[i])
+            print(i, ": ", data.range_max, data.ranges[i], data.intensities[i])
             angles.append(float(i * data.angle_increment))
             distances.append(float(data.ranges[i]))
     
@@ -229,36 +217,42 @@ def callback(data):
     # calculate the center points of each angle/distance
     ox = np.sin(ang) * dist
     oy = np.cos(ang) * dist
-    occupancy_map, min_x, max_x, min_y, max_y, xy_resolution, center_x, center_y = \
+    occupancy_map, min_x, max_x, min_y, max_y, xy_resolution = \
         generate_ray_casting_grid_map(ox, oy, xy_resolution, True)
     xy_res = np.array(occupancy_map).shape
-    #for i in occupancy_map:
-    #    print(i)
-    #print(type(occupancy_map))
-    occupancy_map = (occupancy_map*100).astype(np.int8)
-    print("measuring points between", data.range_min, "and", data.range_max) 
     
-    grid = OccupancyGrid()
-    grid.info.resolution = xy_resolution
-    grid.info.width = xy_res[1]
-    grid.info.height = xy_res[0]
-    # calculate offset 
-    print(xy_res[1]-center_x) 
-    grid.info.origin.position.x = row_to_x(xy_res[1], (xy_res[1])/2-center_x, xy_resolution)
-    grid.info.origin.position.y = col_to_y(xy_res[0], (xy_res[0])/2-center_y, xy_resolution)
-    grid.header.frame_id = "world"
+    if (first == False):
+        plt.clf()
+    else:
+        first == False
 
-    #print("occupancy map:", occupancy_map, len(occupancy_map))
-    for i in range(xy_res[0]):
-        for j in range(xy_res[1]):
-            grid.data.append(occupancy_map[i][j])
-            #print(occupancy_map[i][j])
-    pub.publish(grid)
-    print("occupancy grid is published")
+    # update the gui everytime a new laserscan message is sent
+    plt.figure(1, figsize=(10, 4))
+    plt.subplot(122)
+    plt.imshow(occupancy_map, cmap="PiYG_r")
+    # cmap = "binary" "PiYG_r" "PiYG_r" "bone" "bone_r" "RdYlGn_r"
+    plt.clim(-0.4, 1.4)
+    plt.gca().set_xticks(np.arange(-.5, xy_res[1], 1), minor=True)
+    plt.gca().set_yticks(np.arange(-.5, xy_res[0], 1), minor=True)
+    plt.grid(True, which="minor", color="w", linewidth=0.6, alpha=0.5)
+    plt.colorbar()
+    plt.subplot(121)
+    plt.plot([oy, np.zeros(np.size(oy))], [ox, np.zeros(np.size(oy))], "ro-")
+    plt.axis("equal")
+    plt.plot(0.0, 0.0, "ob")
+    plt.gca().set_aspect("equal", "box")
+    bottom, top = plt.ylim()  # return the current y-lim
+    plt.ylim((top, bottom))  # rescale y axis, to match the grid orientation
+    plt.grid(True)
+    plt.show()
+    
+    #return angles, distances
 
 def main():
+    rospy.init_node('perception_node', anonymous=True)
     rospy.Subscriber("scan", LaserScan, callback)
     rospy.spin()
-
+    
 if __name__ == '__main__':
     main()
+

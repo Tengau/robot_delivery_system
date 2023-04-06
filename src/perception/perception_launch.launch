@@ -1,16 +1,7 @@
 <launch>
-
-  <group ns="turtlesim1">
-    <node pkg="perception" name="perception" type="perception_node"/>
-  </group>
-
-  <group ns="lidar">
-    <node pkg="node" name="node" type="node"/>
-  </group>
-
-  <node pkg="turtlesim" name="mimic" type="mimic">
-    <remap from="input" to="turtlesim1/turtle1"/>
-    <remap from="output" to="turtlesim2/turtle1"/>
+  <node name="delta_lidar"    pkg="delta_lidar"  type="delta_lidar_node" output="screen">
+    <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
+    <param name="frame_id"            type="string" value="laser"/>
   </node>
-
-</launch>
+  <node name="perception"  pkg="perception"  type="perception_node" output="screen" />
+</launch> 
