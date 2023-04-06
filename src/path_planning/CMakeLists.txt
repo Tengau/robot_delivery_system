@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   navigation
   roscpp
   rospy
+  sensor_msgs
   std_msgs
 )
 
@@ -74,7 +75,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
 # generate_messages(
 #   DEPENDENCIES
-#   geometry_msgs#   nav_msgs#   std_msgs
+#   geometry_msgs#   nav_msgs#   sensor_msgs#   std_msgs
 # )
 
 ################################################
@@ -109,7 +110,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES path_planning
-#  CATKIN_DEPENDS geometry_msgs localization nav_msgs navigation roscpp rospy std_msgs
+#  CATKIN_DEPENDS geometry_msgs localization nav_msgs navigation roscpp rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
 )
 

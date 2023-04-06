@@ -7,7 +7,7 @@
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
   <!-- <maintainer email="jane.doe@example.com">Jane Doe</maintainer> -->
-  <maintainer email="tabibwasitrahman@todo.todo">tabibwasitrahman</maintainer>
+  <maintainer email="debian@todo.todo">debian</maintainer>
 
 
   <!-- One license tag required, multiple allowed, one license per tag -->
@@ -55,6 +55,7 @@
   <build_depend>navigation</build_depend>
   <build_depend>roscpp</build_depend>
   <build_depend>rospy</build_depend>
+  <build_depend>sensor_msgs</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_export_depend>geometry_msgs</build_export_depend>
   <build_export_depend>localization</build_export_depend>
@@ -62,6 +63,7 @@
   <build_export_depend>navigation</build_export_depend>
   <build_export_depend>roscpp</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>sensor_msgs</build_export_depend>
   <build_export_depend>std_msgs</build_export_depend>
   <exec_depend>geometry_msgs</exec_depend>
   <exec_depend>localization</exec_depend>
@@ -69,6 +71,7 @@
   <exec_depend>navigation</exec_depend>
   <exec_depend>roscpp</exec_depend>
   <exec_depend>rospy</exec_depend>
+  <exec_depend>sensor_msgs</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 
 

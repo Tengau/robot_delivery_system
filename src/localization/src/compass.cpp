@@ -1,26 +1,17 @@
-/**
- * @file rc_project_template.c
- *
- * This is meant to be a skeleton program for Robot Control projects. Change
- * this description and file name before modifying for your own purpose.
- */
-
 #include "ros/ros.h"
 #include "std_msgs/Float64.h"
 
-#include <stdio.h>
 #include <robotcontrol.h> // includes ALL Robot Control subsystems
 
 #include <rc/mpu.h>
 #include <rc/time.h>
-#include <signal.h>
 #include <math.h>
 
 #define I2C_BUS 2
 
 int main(int argc, char **argv)
 {
-	ros::init(argc, argv, "talker");
+	ros::init(argc, argv, "compass");
 	ros::NodeHandle n;
 
 	ros::Publisher compass_publisher = n.advertise<std_msgs::Float64>("compass", 1000);
