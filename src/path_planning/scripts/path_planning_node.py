@@ -11,7 +11,7 @@ from std_msgs.msg import Float64
 from localization.msg import Instructions
 
 
-    #UART setup 
+#UART setup 
 UART.setup("UART5")
 serial = serial.Serial(port = '/dev/ttyO5', baudrate = 9600 )
 
@@ -38,7 +38,8 @@ def handle_path(msg):
     global list_of_waypoints
     for pose in msg.poses:
         list_of_waypoints.append((pose.pose.position.x, pose.pose.position.y))
-
+    print(list_of_waypoints)
+    
 def handle_robot_pose(msg):
     global gps_current
     gps_current = (msg.pose.position.x, msg.pose.position.y)
@@ -46,9 +47,9 @@ def handle_robot_pose(msg):
 def handle_instructions(msg):
     global instructions
     instructions = msg.instructions
-    time.sleep(10)
-    print(list_of_waypoints)
-    movement(instructions)
+    #time.sleep(10)
+    print(instructions)
+    #movement(instructions)
 
 def move(v, w):
     command = '!'+ v + '@' + w + '#'
@@ -110,5 +111,7 @@ if __name__ == "__main__":
     rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
     rospy.Subscriber("compass", Float64, handle_compass)
     rospy.Subscriber("instructions", Instructions, handle_instructions)
-   
+    
+    
+    
     rospy.spin()
