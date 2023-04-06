@@ -6,7 +6,7 @@ import serial
 import Adafruit_BBIO.UART as UART
 
 from nav_msgs.msg import Path
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, Point
 from std_msgs.msg import Float64
 from localization.msg import Instructions
 
@@ -21,6 +21,7 @@ compass_readings = [0,0,0,0,0,0,0,0,0,0]
 compass = 0
 
 gps_current = (0,0)
+estimated_pose = (0,0,0)
 
 instructions = []
 
@@ -43,7 +44,11 @@ def handle_path(msg):
 def handle_robot_pose(msg):
     global gps_current
     gps_current = (msg.pose.position.x, msg.pose.position.y)
-    
+
+def handle_estimated_pose(msg):
+    global estimated_pose
+    estimated_pose = (msg.x,msg.y,msg.z)
+
 def handle_instructions(msg):
     global instructions
     instructions = msg.instructions
@@ -52,7 +57,7 @@ def handle_instructions(msg):
     #movement(instructions)
 
 def move(v, w):
-    command = '!'+ v + '@' + w + '#'
+    command = '!'+ str(v) + '@' + str(w) + '#'
     serial.write(command.encode('utf-8'))
 
 #from gps_mapping_demo import list_of_waypoints
@@ -72,7 +77,7 @@ def distancedif(point1, point2):
 
 def movement(instructions):
     for i in instructions:
-        #current_orientation = -1 * compass
+    
         target_angle = angledif(list_of_waypoints[i.from_index], list_of_waypoints[i.to_index])
         angledifference = target_angle + sum(compass_readings)/len(compass_readings) 
         #angledifference = target_angle + compass
@@ -89,12 +94,11 @@ def movement(instructions):
             else:
                 move("0", "-0.2") #turn left ()
                 
-            while count != 0:
-                continue
-            angledifference = target_angle + sum(compass_readings)/len(compass_readings)      
-            
+            angledifference = target_angle + sum(compass_readings)/len(compass_readings)    
             #angledifference = target_angle + compass      
-            move("0","0")#stop()
+            
+            move("0","0") #stop()
+        
         distance_to_go = distancedif(gps_current, list_of_waypoints[i.to_index])
         #if gps_current is in list of waypoints..
         while distance_to_go > 0.1:
@@ -111,7 +115,10 @@ if __name__ == "__main__":
     rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
     rospy.Subscriber("compass", Float64, handle_compass)
     rospy.Subscriber("instructions", Instructions, handle_instructions)
+    rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
     
-    
-    
+
+    while True:
+        move(0.2,0)
+
     rospy.spin()

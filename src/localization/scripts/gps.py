@@ -21,32 +21,35 @@ if __name__ == '__main__':
     # setting up an infinite loop
     rate = rospy.Rate(10) # 10Hz
     while not rospy.is_shutdown():
-        
-        # reading the gps info
-        data = gps.readline().decode().split(',')
-
-        # creating the Point message to be published
-        point = Point()
-        if data[0] == '$GPGGA' and data[6] == '1':
+       
+        try:
+            # reading the gps info
+            data = gps.readline().decode().split(',')
+        except UnicodeDecodeError:
+            pass
+        else:
+            # creating the Point message to be published
+            point = Point()
+            if data[0] == '$GPGGA' and data[6] == '1':
             
-            lat_sign = 1
-            if data[3] == "S":
-                lat_sign = -1
+                lat_sign = 1
+                if data[3] == "S":
+                    lat_sign = -1
             
-            lon_sign = 1
-            if data[5] == "W":
-                lon_sign = -1
+                lon_sign = 1
+                if data[5] == "W":
+                    lon_sign = -1
             
-            lat_deg = int(data[2][:2])
-            lat_min = float(data[2][2:]) / 60
+                lat_deg = int(data[2][:2])
+                lat_min = float(data[2][2:]) / 60
             
-            lon_deg = int(data[4][:3])
-            lon_min = float(data[4][3:]) / 60
+                lon_deg = int(data[4][:3])
+                lon_min = float(data[4][3:]) / 60
             
-            point.x =  lat_sign * (lat_deg + lat_min)
-            point.y =  lon_sign * (lon_deg + lon_min)
+                point.x =  lat_sign * (lat_deg + lat_min)
+                point.y =  lon_sign * (lon_deg + lon_min)
             
-            gps_publisher.publish(point)
+                gps_publisher.publish(point)
         rate.sleep()
 
 #while gps.inWaiting()==0:

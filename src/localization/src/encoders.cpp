@@ -1,5 +1,5 @@
 #include "ros/ros.h"
-#include "std_msgs/Float64.h"
+#include "geometry_msgs/Point.h"
 
 #include <iostream>
 #include <robotcontrol.h> // includes ALL Robot Control subsystems
@@ -14,7 +14,7 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "encoders");
 	ros::NodeHandle n;
 
-	ros::Publisher estimated_pose_publisher = n.advertise<geometry_msgs::Pose>("estimated_pose", 1000);
+	ros::Publisher estimated_pose_publisher = n.advertise<geometry_msgs::Point>("estimated_pose", 1000);
 
 	if (rc_encoder_eqep_init()){
 		std::cout << "Failed to initialize encoders" << std::endl;
