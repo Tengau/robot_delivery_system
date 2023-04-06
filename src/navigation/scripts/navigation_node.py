@@ -102,9 +102,6 @@ if __name__ == '__main__':
     waypoints = create_coordinate_array(response)
     instructions = get_waypoint_distances_and_set_of_instructions(response)
 
-    print(waypoints)
-    print(instructions)
-
     instructions_msg = Instructions()
 
     for i in instructions:
