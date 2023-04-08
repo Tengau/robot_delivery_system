@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 		y += dy;
 		theta += dtheta; 	
 
-		std::cout << "x: " << x << " y: " << y << "theta: " << theta << std::endl;  
+		std::cout << "x: " << x << " y: " << y << " theta: " << theta << std::endl;  
 
 		l_prev = l;
 		r_prev = r;

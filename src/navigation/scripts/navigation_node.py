@@ -3,7 +3,7 @@
 import rospy
 from localization.srv import *
 from nav_msgs.msg import Path
-from geometry_msgs.msg import PoseStamped
+from geometry_msgs.msg import PoseStamped, Point
 from localization.msg import Instructions
 from localization.msg import Instruction
 
@@ -93,8 +93,11 @@ def gps_find(m):
 def publish_msgs(lat1, lon1,lat2, lon2):
     path_publisher = rospy.Publisher('path', Path, queue_size=10)
     instructions_publisher = rospy.Publisher('instructions', Instructions, queue_size=10)
-
-    response = get_directions_response( 43.12663, -77.63024, latitude, longitude)
+    
+    try:
+        response = get_directions_response(lat1, lon1, lat2, lon2)
+    except:
+        print("no internet, could not generate waypoints and instructions")
     waypoints = create_coordinate_array(response)
     instructions = get_waypoint_distances_and_set_of_instructions(response)
 
@@ -136,8 +139,15 @@ def publish_msgs(lat1, lon1,lat2, lon2):
         
     path_publisher.publish(path)
 
+first_messsage = True
+
+def handle_gps(msg):
+    global first_message
+    if first_message:
+        publish_msgs(msg.x, msg.y, rospy.get_param('latitude'), rospy.get_param('longitude'))
+        first_message = False
+
 if __name__ == '__main__':
     rospy.init_node('navigation_node')
-    latitude = rospy.get_param('latitude') # 43.12712
-    longitude = rospy.get_param('longitude') # -77.62891
-    publish_msgs(0,0,latitude,longitude)
+    rospy.Subscriber("gps", Point, handle_gps)
+    rospy.spin()
