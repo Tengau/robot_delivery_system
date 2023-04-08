@@ -90,14 +90,10 @@ def gps_find(m):
 #gps_find(m)
 #m.save('./route_map.html')
 
-if __name__ == '__main__':
-    
-    rospy.init_node('navigation_node')
+def publish_msgs(lat1, lon1,lat2, lon2):
     path_publisher = rospy.Publisher('path', Path, queue_size=10)
     instructions_publisher = rospy.Publisher('instructions', Instructions, queue_size=10)
-   
-    latitude = rospy.get_param('latitude') # 43.12712
-    longitude = rospy.get_param('longitude') # -77.62891
+
     response = get_directions_response( 43.12663, -77.63024, latitude, longitude)
     waypoints = create_coordinate_array(response)
     instructions = get_waypoint_distances_and_set_of_instructions(response)
@@ -140,3 +136,8 @@ if __name__ == '__main__':
         
     path_publisher.publish(path)
 
+if __name__ == '__main__':
+    rospy.init_node('navigation_node')
+    latitude = rospy.get_param('latitude') # 43.12712
+    longitude = rospy.get_param('longitude') # -77.62891
+    publish_msgs(0,0,latitude,longitude)

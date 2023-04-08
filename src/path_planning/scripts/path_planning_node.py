@@ -13,7 +13,7 @@ from localization.msg import Instructions
 
 #UART setup 
 UART.setup("UART5")
-serial = serial.Serial(port = '/dev/ttyO5', baudrate = 9600 )
+serial = serial.Serial(port = '/dev/ttyO1', baudrate = 9600 )
 
 list_of_waypoints = []
 
@@ -52,13 +52,14 @@ def handle_estimated_pose(msg):
 def handle_instructions(msg):
     global instructions
     instructions = msg.instructions
-    #time.sleep(10)
+    time.sleep(10)
     print(instructions)
-    #movement(instructions)
+    movement(instructions)
 
 def move(v, w):
     command = '!'+ str(v) + '@' + str(w) + '#'
     serial.write(command.encode('utf-8'))
+    time.sleep(0.1)
 
 #from gps_mapping_demo import list_of_waypoints
 #Given a list of waypoints (x,y cordinates (x, north, y is west)), also have orientation and location of robot (at all times). Move to each next coordinate till end location.
@@ -76,17 +77,19 @@ def distancedif(point1, point2):
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
 
 def movement(instructions):
+    #print("Compass reading: ", compass)
     for i in instructions:
     
         target_angle = angledif(list_of_waypoints[i.from_index], list_of_waypoints[i.to_index])
+        print("Target Angle: ", target_angle)
         angledifference = target_angle + sum(compass_readings)/len(compass_readings) 
         #angledifference = target_angle + compass
-        
+        print("Angle difference at the start: ", angledifference)
         while angledifference < -2 or angledifference > 2:
             
             print("angle diff:", angledifference)
             #print("compass:", compass)
-            print("avg compass:", sum(compass_readings)/len(compass_readings))
+            #print("avg compass:", sum(compass_readings)/len(compass_readings))
             
             if angledifference < 0:
                 move("0","0.2" ) #turn right ()
@@ -97,7 +100,7 @@ def movement(instructions):
             angledifference = target_angle + sum(compass_readings)/len(compass_readings)    
             #angledifference = target_angle + compass      
             
-            move("0","0") #stop()
+        move("0","0") #stop()
         
         distance_to_go = distancedif(gps_current, list_of_waypoints[i.to_index])
         #if gps_current is in list of waypoints..
@@ -118,7 +121,7 @@ if __name__ == "__main__":
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
     
 
-    while True:
-        move(0.2,0)
+   # while True:
+    #    move(0.2,0)
 
     rospy.spin()

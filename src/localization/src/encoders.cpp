@@ -21,13 +21,47 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	ros::Rate timer(20);
-	while (ros::ok()) {
-		int left_encoder = rc_encoder_eqep_read(2);
-		int right_encoder = rc_encoder_eqep_read(3);
+	int l_prev = 0;
+	int r_prev = 0;
 
-		std::cout << "left: " << left_encoder << " right: " << right_encoder << std::endl;  
+	double x = 0.0;
+	double y = 0.0;
+	double theta = 0.0;
+
+	double wheel_radius = 0.0381;
+	double robot_width = 0.6096;
+
+	int freq = 20;
+	ros::Rate timer(freq);
+	while (ros::ok()) {
+		int l= rc_encoder_eqep_read(2);
+		int r = -1*rc_encoder_eqep_read(3);
+
+		std::cout << "left: " << l << " right: " << r << std::endl;  
 		
+		int dl = l - l_prev;
+		int dr = l - r_prev;
+
+		double vl = dl * 2.0 * M_PI / 2100.0;
+		double vr = dr * 2.0 * M_PI / 2100.0;
+
+		double dx = wheel_radius * (vl + vr) * cos(theta) / 2.0; 
+		double dy = wheel_radius * (vl + vr)  * sin(theta) / 2.0;
+		double dtheta = wheel_radius * (vr - vl) / robot_width;
+
+		//double dx = wheel_radius * vl * cos(theta); 
+		//double dy = wheel_radius * vl * sin(theta);
+		//double dtheta = -2.0 * wheel_radius * vl / robot_width;
+
+		x += dx;
+		y += dy;
+		theta += dtheta; 	
+
+		std::cout << "x: " << x << " y: " << y << "theta: " << theta << std::endl;  
+
+		l_prev = l;
+		r_prev = r;
+
 		ros::spinOnce();
 		timer.sleep();
 	} rc_encoder_eqep_cleanup();
