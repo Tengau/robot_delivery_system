@@ -28,28 +28,28 @@ The CXX compiler identification is GNU, found in "/home/debian/robot_delivery_sy
 Determining if the C compiler works passed with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_7a9eb/fast"
-/usr/bin/make -f CMakeFiles/cmTC_7a9eb.dir/build.make CMakeFiles/cmTC_7a9eb.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_8679f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8679f.dir/build.make CMakeFiles/cmTC_8679f.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_7a9eb.dir/testCCompiler.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_7a9eb.dir/testCCompiler.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp/testCCompiler.c
-Linking C executable cmTC_7a9eb
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7a9eb.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_7a9eb.dir/testCCompiler.c.o  -o cmTC_7a9eb 
+Building C object CMakeFiles/cmTC_8679f.dir/testCCompiler.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_8679f.dir/testCCompiler.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp/testCCompiler.c
+Linking C executable cmTC_8679f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8679f.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_8679f.dir/testCCompiler.c.o  -o cmTC_8679f 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_ca4ba/fast"
-/usr/bin/make -f CMakeFiles/cmTC_ca4ba.dir/build.make CMakeFiles/cmTC_ca4ba.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_1760f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_1760f.dir/build.make CMakeFiles/cmTC_1760f.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c
-Linking C executable cmTC_ca4ba
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca4ba.dir/link.txt --verbose=1
-/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o  -o cmTC_ca4ba 
+Building C object CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c
+Linking C executable cmTC_1760f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1760f.dir/link.txt --verbose=1
+/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o  -o cmTC_1760f 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/cc
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper
@@ -59,9 +59,9 @@ Thread model: posix
 gcc version 8.3.0 (Debian 8.3.0-6) 
 COMPILER_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/
 LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ca4ba'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
- /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccjLvB3b.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_ca4ba /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ca4ba'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_1760f'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
+ /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccwFfOsN.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_1760f /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_1760f'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -69,14 +69,14 @@ Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_ca4ba/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_ca4ba.dir/build.make CMakeFiles/cmTC_ca4ba.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_1760f/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_1760f.dir/build.make CMakeFiles/cmTC_1760f.dir/build]
   ignore line: [make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp']
-  ignore line: [Building C object CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o]
-  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c]
-  ignore line: [Linking C executable cmTC_ca4ba]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ca4ba.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o  -o cmTC_ca4ba ]
+  ignore line: [Building C object CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o]
+  ignore line: [/usr/bin/cc    -o CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o   -c /usr/share/cmake-3.13/Modules/CMakeCCompilerABI.c]
+  ignore line: [Linking C executable cmTC_1760f]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_1760f.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/cc     -v -rdynamic CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o  -o cmTC_1760f ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/cc]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper]
@@ -86,13 +86,13 @@ Parsed C implicit link information from above output:
   ignore line: [gcc version 8.3.0 (Debian 8.3.0-6) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_ca4ba'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp']
-  link line: [ /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccjLvB3b.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_ca4ba /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_1760f'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp']
+  link line: [ /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccwFfOsN.res -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lgcc_s --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_1760f /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o -lgcc --push-state --as-needed -lgcc_s --pop-state -lc -lgcc --push-state --as-needed -lgcc_s --pop-state /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o]
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccjLvB3b.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccwFfOsN.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -109,7 +109,7 @@ Parsed C implicit link information from above output:
     arg [armelf_linux_eabi] ==> ignore
     arg [-pie] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_ca4ba] ==> ignore
+    arg [cmTC_1760f] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o] ==> ignore
@@ -118,7 +118,7 @@ Parsed C implicit link information from above output:
     arg [-L/usr/lib/gcc/arm-linux-gnueabihf/8/../../..] ==> dir [/usr/lib/gcc/arm-linux-gnueabihf/8/../../..]
     arg [-L/lib/arm-linux-gnueabihf] ==> dir [/lib/arm-linux-gnueabihf]
     arg [-L/usr/lib/arm-linux-gnueabihf] ==> dir [/usr/lib/arm-linux-gnueabihf]
-    arg [CMakeFiles/cmTC_ca4ba.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_1760f.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lgcc] ==> lib [gcc]
     arg [--push-state] ==> ignore
     arg [--as-needed] ==> ignore
@@ -147,14 +147,14 @@ Parsed C implicit link information from above output:
 Detecting C [-std=c11] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c086d/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c086d.dir/build.make CMakeFiles/cmTC_c086d.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_5f99f/fast"
+/usr/bin/make -f CMakeFiles/cmTC_5f99f.dir/build.make CMakeFiles/cmTC_5f99f.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_c086d.dir/feature_tests.c.o
-/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_c086d.dir/feature_tests.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.c
-Linking C executable cmTC_c086d
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c086d.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_c086d.dir/feature_tests.c.o  -o cmTC_c086d 
+Building C object CMakeFiles/cmTC_5f99f.dir/feature_tests.c.o
+/usr/bin/cc   -std=c11 -o CMakeFiles/cmTC_5f99f.dir/feature_tests.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.c
+Linking C executable cmTC_5f99f
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_5f99f.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_5f99f.dir/feature_tests.c.o  -o cmTC_5f99f 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -167,14 +167,14 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Detecting C [-std=c99] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_a812f/fast"
-/usr/bin/make -f CMakeFiles/cmTC_a812f.dir/build.make CMakeFiles/cmTC_a812f.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_a78ec/fast"
+/usr/bin/make -f CMakeFiles/cmTC_a78ec.dir/build.make CMakeFiles/cmTC_a78ec.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_a812f.dir/feature_tests.c.o
-/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_a812f.dir/feature_tests.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.c
-Linking C executable cmTC_a812f
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a812f.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_a812f.dir/feature_tests.c.o  -o cmTC_a812f 
+Building C object CMakeFiles/cmTC_a78ec.dir/feature_tests.c.o
+/usr/bin/cc   -std=c99 -o CMakeFiles/cmTC_a78ec.dir/feature_tests.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.c
+Linking C executable cmTC_a78ec
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_a78ec.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_a78ec.dir/feature_tests.c.o  -o cmTC_a78ec 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -187,14 +187,14 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Detecting C [-std=c90] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_d103e/fast"
-/usr/bin/make -f CMakeFiles/cmTC_d103e.dir/build.make CMakeFiles/cmTC_d103e.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_4a492/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4a492.dir/build.make CMakeFiles/cmTC_4a492.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_d103e.dir/feature_tests.c.o
-/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_d103e.dir/feature_tests.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.c
-Linking C executable cmTC_d103e
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_d103e.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_d103e.dir/feature_tests.c.o  -o cmTC_d103e 
+Building C object CMakeFiles/cmTC_4a492.dir/feature_tests.c.o
+/usr/bin/cc   -std=c90 -o CMakeFiles/cmTC_4a492.dir/feature_tests.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.c
+Linking C executable cmTC_4a492
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_4a492.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_4a492.dir/feature_tests.c.o  -o cmTC_4a492 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -205,28 +205,28 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_81b3c/fast"
-/usr/bin/make -f CMakeFiles/cmTC_81b3c.dir/build.make CMakeFiles/cmTC_81b3c.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_438cd/fast"
+/usr/bin/make -f CMakeFiles/cmTC_438cd.dir/build.make CMakeFiles/cmTC_438cd.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_81b3c.dir/testCXXCompiler.cxx.o
-/usr/bin/c++     -o CMakeFiles/cmTC_81b3c.dir/testCXXCompiler.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
-Linking CXX executable cmTC_81b3c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_81b3c.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_81b3c.dir/testCXXCompiler.cxx.o  -o cmTC_81b3c 
+Building CXX object CMakeFiles/cmTC_438cd.dir/testCXXCompiler.cxx.o
+/usr/bin/c++     -o CMakeFiles/cmTC_438cd.dir/testCXXCompiler.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp/testCXXCompiler.cxx
+Linking CXX executable cmTC_438cd
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_438cd.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_438cd.dir/testCXXCompiler.cxx.o  -o cmTC_438cd 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_f7979/fast"
-/usr/bin/make -f CMakeFiles/cmTC_f7979.dir/build.make CMakeFiles/cmTC_f7979.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_714d8/fast"
+/usr/bin/make -f CMakeFiles/cmTC_714d8.dir/build.make CMakeFiles/cmTC_714d8.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o
-/usr/bin/c++     -o CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_f7979
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f7979.dir/link.txt --verbose=1
-/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_f7979 
+Building CXX object CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o
+/usr/bin/c++     -o CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp
+Linking CXX executable cmTC_714d8
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_714d8.dir/link.txt --verbose=1
+/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_714d8 
 Using built-in specs.
 COLLECT_GCC=/usr/bin/c++
 COLLECT_LTO_WRAPPER=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper
@@ -236,9 +236,9 @@ Thread model: posix
 gcc version 8.3.0 (Debian 8.3.0-6) 
 COMPILER_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/
 LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_f7979' '-shared-libgcc'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
- /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSAQ2iw.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_f7979 /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o
-COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_f7979' '-shared-libgcc'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_714d8' '-shared-libgcc'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
+ /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccUGgaSd.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_714d8 /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_714d8' '-shared-libgcc'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp'
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -246,14 +246,14 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_f7979/fast"]
-  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_f7979.dir/build.make CMakeFiles/cmTC_f7979.dir/build]
+  ignore line: [Run Build Command:"/usr/bin/make" "cmTC_714d8/fast"]
+  ignore line: [/usr/bin/make -f CMakeFiles/cmTC_714d8.dir/build.make CMakeFiles/cmTC_714d8.dir/build]
   ignore line: [make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp']
-  ignore line: [Building CXX object CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o]
-  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp]
-  ignore line: [Linking CXX executable cmTC_f7979]
-  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_f7979.dir/link.txt --verbose=1]
-  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_f7979 ]
+  ignore line: [Building CXX object CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [/usr/bin/c++     -o CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o -c /usr/share/cmake-3.13/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [Linking CXX executable cmTC_714d8]
+  ignore line: [/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_714d8.dir/link.txt --verbose=1]
+  ignore line: [/usr/bin/c++      -v -rdynamic CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o  -o cmTC_714d8 ]
   ignore line: [Using built-in specs.]
   ignore line: [COLLECT_GCC=/usr/bin/c++]
   ignore line: [COLLECT_LTO_WRAPPER=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper]
@@ -263,13 +263,13 @@ Parsed CXX implicit link information from above output:
   ignore line: [gcc version 8.3.0 (Debian 8.3.0-6) ]
   ignore line: [COMPILER_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/]
   ignore line: [LIBRARY_PATH=/usr/lib/gcc/arm-linux-gnueabihf/8/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/:/usr/lib/gcc/arm-linux-gnueabihf/8/../../../:/lib/arm-linux-gnueabihf/:/lib/:/usr/lib/arm-linux-gnueabihf/:/usr/lib/]
-  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_f7979' '-shared-libgcc'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp']
-  link line: [ /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccSAQ2iw.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_f7979 /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o]
+  ignore line: [COLLECT_GCC_OPTIONS='-v' '-rdynamic' '-o' 'cmTC_714d8' '-shared-libgcc'  '-mfloat-abi=hard' '-mfpu=vfpv3-d16' '-mthumb' '-mtls-dialect=gnu' '-march=armv7-a+fp']
+  link line: [ /usr/lib/gcc/arm-linux-gnueabihf/8/collect2 -plugin /usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so -plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper -plugin-opt=-fresolution=/tmp/ccUGgaSd.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr -export-dynamic -dynamic-linker /lib/ld-linux-armhf.so.3 -X --hash-style=gnu -m armelf_linux_eabi -pie -o cmTC_714d8 /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o /usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o -L/usr/lib/gcc/arm-linux-gnueabihf/8 -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf -L/usr/lib/gcc/arm-linux-gnueabihf/8/../../.. -L/lib/arm-linux-gnueabihf -L/usr/lib/arm-linux-gnueabihf CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/arm-linux-gnueabihf/8/crtendS.o /usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crtn.o]
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/collect2] ==> ignore
     arg [-plugin] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/liblto_plugin.so] ==> ignore
     arg [-plugin-opt=/usr/lib/gcc/arm-linux-gnueabihf/8/lto-wrapper] ==> ignore
-    arg [-plugin-opt=-fresolution=/tmp/ccSAQ2iw.res] ==> ignore
+    arg [-plugin-opt=-fresolution=/tmp/ccUGgaSd.res] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc_s] ==> ignore
     arg [-plugin-opt=-pass-through=-lgcc] ==> ignore
     arg [-plugin-opt=-pass-through=-lc] ==> ignore
@@ -286,7 +286,7 @@ Parsed CXX implicit link information from above output:
     arg [armelf_linux_eabi] ==> ignore
     arg [-pie] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_f7979] ==> ignore
+    arg [cmTC_714d8] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/Scrt1.o] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/../../../arm-linux-gnueabihf/crti.o] ==> ignore
     arg [/usr/lib/gcc/arm-linux-gnueabihf/8/crtbeginS.o] ==> ignore
@@ -295,7 +295,7 @@ Parsed CXX implicit link information from above output:
     arg [-L/usr/lib/gcc/arm-linux-gnueabihf/8/../../..] ==> dir [/usr/lib/gcc/arm-linux-gnueabihf/8/../../..]
     arg [-L/lib/arm-linux-gnueabihf] ==> dir [/lib/arm-linux-gnueabihf]
     arg [-L/usr/lib/arm-linux-gnueabihf] ==> dir [/usr/lib/arm-linux-gnueabihf]
-    arg [CMakeFiles/cmTC_f7979.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_714d8.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lstdc++] ==> lib [stdc++]
     arg [-lm] ==> lib [m]
     arg [-lgcc_s] ==> lib [gcc_s]
@@ -320,14 +320,14 @@ Parsed CXX implicit link information from above output:
 Detecting CXX [-std=c++2a] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c221b/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c221b.dir/build.make CMakeFiles/cmTC_c221b.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_6655e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_6655e.dir/build.make CMakeFiles/cmTC_6655e.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_c221b.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++2a -o CMakeFiles/cmTC_c221b.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_c221b
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_c221b.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_c221b.dir/feature_tests.cxx.o  -o cmTC_c221b 
+Building CXX object CMakeFiles/cmTC_6655e.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++2a -o CMakeFiles/cmTC_6655e.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_6655e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6655e.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_6655e.dir/feature_tests.cxx.o  -o cmTC_6655e 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -393,14 +393,14 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Detecting CXX [-std=c++17] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_62460/fast"
-/usr/bin/make -f CMakeFiles/cmTC_62460.dir/build.make CMakeFiles/cmTC_62460.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_fedec/fast"
+/usr/bin/make -f CMakeFiles/cmTC_fedec.dir/build.make CMakeFiles/cmTC_fedec.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_62460.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++17 -o CMakeFiles/cmTC_62460.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_62460
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_62460.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_62460.dir/feature_tests.cxx.o  -o cmTC_62460 
+Building CXX object CMakeFiles/cmTC_fedec.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++17 -o CMakeFiles/cmTC_fedec.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_fedec
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_fedec.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_fedec.dir/feature_tests.cxx.o  -o cmTC_fedec 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -466,14 +466,14 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_bfdf3/fast"
-/usr/bin/make -f CMakeFiles/cmTC_bfdf3.dir/build.make CMakeFiles/cmTC_bfdf3.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_afe7e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_afe7e.dir/build.make CMakeFiles/cmTC_afe7e.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_bfdf3.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_bfdf3.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_bfdf3
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_bfdf3.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_bfdf3.dir/feature_tests.cxx.o  -o cmTC_bfdf3 
+Building CXX object CMakeFiles/cmTC_afe7e.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++14 -o CMakeFiles/cmTC_afe7e.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_afe7e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_afe7e.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_afe7e.dir/feature_tests.cxx.o  -o cmTC_afe7e 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -539,14 +539,14 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_0cd95/fast"
-/usr/bin/make -f CMakeFiles/cmTC_0cd95.dir/build.make CMakeFiles/cmTC_0cd95.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_be68e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_be68e.dir/build.make CMakeFiles/cmTC_be68e.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_0cd95.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_0cd95.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_0cd95
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_0cd95.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_0cd95.dir/feature_tests.cxx.o  -o cmTC_0cd95 
+Building CXX object CMakeFiles/cmTC_be68e.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++11 -o CMakeFiles/cmTC_be68e.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_be68e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_be68e.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_be68e.dir/feature_tests.cxx.o  -o cmTC_be68e 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -612,14 +612,14 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_6eb44/fast"
-/usr/bin/make -f CMakeFiles/cmTC_6eb44.dir/build.make CMakeFiles/cmTC_6eb44.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_616c0/fast"
+/usr/bin/make -f CMakeFiles/cmTC_616c0.dir/build.make CMakeFiles/cmTC_616c0.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_6eb44.dir/feature_tests.cxx.o
-/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_6eb44.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
-Linking CXX executable cmTC_6eb44
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_6eb44.dir/link.txt --verbose=1
-/usr/bin/c++       -rdynamic CMakeFiles/cmTC_6eb44.dir/feature_tests.cxx.o  -o cmTC_6eb44 
+Building CXX object CMakeFiles/cmTC_616c0.dir/feature_tests.cxx.o
+/usr/bin/c++    -std=c++98 -o CMakeFiles/cmTC_616c0.dir/feature_tests.cxx.o -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/feature_tests.cxx
+Linking CXX executable cmTC_616c0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_616c0.dir/link.txt --verbose=1
+/usr/bin/c++       -rdynamic CMakeFiles/cmTC_616c0.dir/feature_tests.cxx.o  -o cmTC_616c0 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
@@ -683,28 +683,28 @@ make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/pe
 Determining if the include file pthread.h exists passed with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_aecda/fast"
-/usr/bin/make -f CMakeFiles/cmTC_aecda.dir/build.make CMakeFiles/cmTC_aecda.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_3a2c6/fast"
+/usr/bin/make -f CMakeFiles/cmTC_3a2c6.dir/build.make CMakeFiles/cmTC_3a2c6.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_aecda.dir/CheckIncludeFile.c.o
-/usr/bin/cc    -o CMakeFiles/cmTC_aecda.dir/CheckIncludeFile.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp/CheckIncludeFile.c
-Linking C executable cmTC_aecda
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_aecda.dir/link.txt --verbose=1
-/usr/bin/cc      -rdynamic CMakeFiles/cmTC_aecda.dir/CheckIncludeFile.c.o  -o cmTC_aecda 
+Building C object CMakeFiles/cmTC_3a2c6.dir/CheckIncludeFile.c.o
+/usr/bin/cc    -o CMakeFiles/cmTC_3a2c6.dir/CheckIncludeFile.c.o   -c /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp/CheckIncludeFile.c
+Linking C executable cmTC_3a2c6
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3a2c6.dir/link.txt --verbose=1
+/usr/bin/cc      -rdynamic CMakeFiles/cmTC_3a2c6.dir/CheckIncludeFile.c.o  -o cmTC_3a2c6 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 
 Determining if the function pthread_create exists in the pthread passed with the following output:
 Change Dir: /home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_7a3af/fast"
-/usr/bin/make -f CMakeFiles/cmTC_7a3af.dir/build.make CMakeFiles/cmTC_7a3af.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_10f92/fast"
+/usr/bin/make -f CMakeFiles/cmTC_10f92.dir/build.make CMakeFiles/cmTC_10f92.dir/build
 make[1]: Entering directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_7a3af.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_7a3af.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.13/Modules/CheckFunctionExists.c
-Linking C executable cmTC_7a3af
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7a3af.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_7a3af.dir/CheckFunctionExists.c.o  -o cmTC_7a3af -lpthread 
+Building C object CMakeFiles/cmTC_10f92.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_10f92.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.13/Modules/CheckFunctionExists.c
+Linking C executable cmTC_10f92
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_10f92.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_10f92.dir/CheckFunctionExists.c.o  -o cmTC_10f92 -lpthread 
 make[1]: Leaving directory '/home/debian/robot_delivery_system/build_isolated/perception/CMakeFiles/CMakeTmp'
 
 

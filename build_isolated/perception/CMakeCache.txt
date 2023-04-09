@@ -361,32 +361,11 @@ _gtest_INCLUDES:FILEPATH=/usr/include/gtest/gtest.h
 //Path to a file.
 _gtest_SOURCES:FILEPATH=/usr/src/gtest/src/gtest.cc
 
-//The directory containing a CMake configuration file for actionlib_msgs.
-actionlib_msgs_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/actionlib_msgs/cmake
-
 //The directory containing a CMake configuration file for catkin.
 catkin_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/catkin/cmake
 
 //The directory containing a CMake configuration file for cpp_common.
 cpp_common_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/cpp_common/cmake
-
-//The directory containing a CMake configuration file for gencpp.
-gencpp_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/gencpp/cmake
-
-//The directory containing a CMake configuration file for geneus.
-geneus_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/geneus/cmake
-
-//The directory containing a CMake configuration file for genlisp.
-genlisp_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/genlisp/cmake
-
-//The directory containing a CMake configuration file for genmsg.
-genmsg_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/genmsg/cmake
-
-//The directory containing a CMake configuration file for gennodejs.
-gennodejs_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/gennodejs/cmake
-
-//The directory containing a CMake configuration file for genpy.
-genpy_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/genpy/cmake
 
 //The directory containing a CMake configuration file for geometry_msgs.
 geometry_msgs_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/geometry_msgs/cmake
@@ -442,9 +421,6 @@ lib:FILEPATH=/home/debian/ros_catkin_ws/install_isolated/lib/libxmlrpcpp.so
 
 //The directory containing a CMake configuration file for message_runtime.
 message_runtime_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/message_runtime/cmake
-
-//The directory containing a CMake configuration file for nav_msgs.
-nav_msgs_DIR:PATH=/home/debian/ros_catkin_ws/install_isolated/share/nav_msgs/cmake
 
 //Value Computed by CMake
 perception_BINARY_DIR:STATIC=/home/debian/robot_delivery_system/build_isolated/perception
