@@ -13,7 +13,7 @@ from localization.msg import Instructions
 
 #UART setup 
 UART.setup("UART5")
-serial = serial.Serial(port = '/dev/ttyO1', baudrate = 9600 )
+serial = serial.Serial(port = '/dev/ttyO5', baudrate = 9600 )
 
 list_of_waypoints = []
 

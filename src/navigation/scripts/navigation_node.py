@@ -94,23 +94,10 @@ def publish_msgs(lat1, lon1,lat2, lon2):
     path_publisher = rospy.Publisher('path', Path, queue_size=10)
     instructions_publisher = rospy.Publisher('instructions', Instructions, queue_size=10)
     
-    try:
-        response = get_directions_response(lat1, lon1, lat2, lon2)
-    except:
-        print("no internet, could not generate waypoints and instructions")
+    response = get_directions_response(lat1, lon1, lat2, lon2)
     waypoints = create_coordinate_array(response)
     instructions = get_waypoint_distances_and_set_of_instructions(response)
-
-    instructions_msg = Instructions()
-
-    for i in instructions:
-        ins = Instruction()
-        ins.from_index = i["from_index"]
-        ins.to_index = i["to_index"]
-        ins.distance = i["distance"]
-        instructions_msg.instructions.append(ins)
-    instructions_publisher.publish(instructions_msg)
-
+    
     path = Path()
     path.header.stamp = rospy.get_rostime()
     path.header.frame_id = "world"
@@ -138,14 +125,26 @@ def publish_msgs(lat1, lon1,lat2, lon2):
         path.poses.append(pose)
         
     path_publisher.publish(path)
+    
+    instructions_msg = Instructions()
+
+    for instruction in instructions:
+        instruction_msg = Instruction()
+        instruction_msg.from_index = instruction["from_index"]
+        instruction_msg.to_index = instruction["to_index"]
+        instruction_msg.distance = instruction["distance"]
+        instructions_msg.instructions.append(instruction_msg)
+    
+    instructions_publisher.publish(instructions_msg)
+
 
 first_messsage = True
 
 def handle_gps(msg):
     global first_message
     if first_message:
-        publish_msgs(msg.x, msg.y, rospy.get_param('latitude'), rospy.get_param('longitude'))
         first_message = False
+        publish_msgs(msg.x, msg.y, rospy.get_param('latitude'), rospy.get_param('longitude'))
 
 if __name__ == '__main__':
     rospy.init_node('navigation_node')
