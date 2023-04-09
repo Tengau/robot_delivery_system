@@ -107,7 +107,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES perception
-  CATKIN_DEPENDS roscpp rospy sensor_msgs message_runtime
+  CATKIN_DEPENDS roscpp rospy sensor_msgs message_runtime nav_msgs
 #  DEPENDS system_lib
 )
 
@@ -165,6 +165,7 @@ catkin_install_python(PROGRAMS 	src/perception_node_simple.py
 				src/perception_node.py 
 				src/practice.py 
 				src/b2a.py
+				src/temp_navigation_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
