@@ -76,23 +76,26 @@ def handle_occ_grid(msg);
 
     print("Checking for obstacle...")
     global obstacleFree
-    
+    break_out_flag = False
     # note:
     # - need to doublecheck which direction the robot is going in
     # - need to double check width and height is--> just make sure its
     #   not some crazy number
     for row in range(origin_y, height):
         for col in range(origin_x - width/2.0, origin_x + width/2.0):
-            if(data->data[row+col] > 50)
+            if(data->data[row+col] > 50):
                 print("Object detected at", col, width)
                 obstacleFree = False
+                break_out_flag = True
                 break
+        if (break_out_flag):
+            break
     obstacleFree = True
 
 
 def move(v, w):
     # if an obstacle is detected, dont move
-    if(!obstacleFree)
+    if(!obstacleFree):
         v = "0.0"
         w = "0.0"
     command = '!'+ str(v) + '@' + str(w) + '#'
