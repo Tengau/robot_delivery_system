@@ -1,0 +1,8 @@
+prefix=/home/debian/robot_delivery_system/devel_isolated/simulation
+
+Name: simulation
+Description: Description of simulation
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
