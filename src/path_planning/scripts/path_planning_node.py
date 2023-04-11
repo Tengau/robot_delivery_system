@@ -5,7 +5,7 @@ import math
 import serial
 import Adafruit_BBIO.UART as UART
 
-from nav_msgs.msg import Path
+from nav_msgs.msg import Path, OccupancyGrid
 from geometry_msgs.msg import PoseStamped, Point
 from std_msgs.msg import Float64
 from localization.msg import Instructions
@@ -26,6 +26,8 @@ estimated_pose = (0,0,0)
 instructions = []
 
 count = 0
+
+obstacleFree = True
 
 def handle_compass(msg):
     global compass
@@ -56,10 +58,50 @@ def handle_instructions(msg):
     print(instructions)
     movement(instructions)
 
+def handle_occ_grid(msg);
+    width = data.info.width
+    height = data.info.height
+
+    origin_x = data.info.origin.position.x
+    origin_y = data.info.origin.position.y
+
+    # checks for points in front of the robot
+    #     xx|xx
+    #     xx|xx
+    #     xx|xx
+    # ------+-------
+    #       |
+    #       |
+    #       |
+
+    print("Checking for obstacle...")
+    global obstacleFree
+    break_out_flag = False
+    # note:
+    # - need to doublecheck which direction the robot is going in
+    # - need to double check width and height is--> just make sure its
+    #   not some crazy number
+    for row in range(origin_y, height):
+        for col in range(origin_x - width/2.0, origin_x + width/2.0):
+            if(data->data[row+col] > 50):
+                print("Object detected at", col, width)
+                obstacleFree = False
+                break_out_flag = True
+                break
+        if (break_out_flag):
+            break
+    obstacleFree = True
+
+
 def move(v, w):
+    # if an obstacle is detected, dont move
+    if(!obstacleFree):
+        v = "0.0"
+        w = "0.0"
     command = '!'+ str(v) + '@' + str(w) + '#'
-    serial.write(command.encode('utf-8'))
+    serial.write(command.encode('utf-8'))    
     time.sleep(0.1)
+
 
 #from gps_mapping_demo import list_of_waypoints
 #Given a list of waypoints (x,y cordinates (x, north, y is west)), also have orientation and location of robot (at all times). Move to each next coordinate till end location.
@@ -119,7 +161,7 @@ if __name__ == "__main__":
     rospy.Subscriber("compass", Float64, handle_compass)
     rospy.Subscriber("instructions", Instructions, handle_instructions)
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    
+    rospy.Subscriber("/map". OccupancyGrid, handle_occ_grid)    
 
    # while True:
     #    move(0.2,0)
