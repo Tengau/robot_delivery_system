@@ -56,9 +56,13 @@ int main(int argc, char **argv)
 		x += dx;
 		y += dy;
 		theta += dtheta; 	
+		if (theta > M_PI)
+			theta -= 2 * M_PI;
+		else if (theta < -1*M_PI)	
+			theta += 2 * M_PI;
 
-		std::cout << "x: " << x << " y: " << y << " theta: " << theta << std::endl;  
-
+		std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180 / M_PI << std::endl;  
+ 
 		l_prev = l;
 		r_prev = r;
 

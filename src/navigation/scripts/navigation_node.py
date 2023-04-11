@@ -33,6 +33,7 @@ def get_directions_response(lat1, long1, lat2, long2, mode='walk'):
 
 def create_coordinate_array(response):
    # use the response
+   print(response.json())
    result = response.json()['features'][0]['geometry']['coordinates']
    points = [(i[1], i[0]) for i in result[0]]
    return points
@@ -40,6 +41,7 @@ def create_coordinate_array(response):
 def get_waypoint_distances_and_set_of_instructions(response):
     data = []
    #i = 0
+    print(response)
     waypoints = response.json()['features'][0]['properties']['legs'][0]['steps']
     #print(waypoints)
     for i in range(len(waypoints)):
@@ -91,6 +93,8 @@ def gps_find(m):
 #m.save('./route_map.html')
 
 def publish_msgs(lat1, lon1,lat2, lon2):
+    print("Publishing waypoints and instructions")
+    
     path_publisher = rospy.Publisher('path', Path, queue_size=10)
     instructions_publisher = rospy.Publisher('instructions', Instructions, queue_size=10)
     
@@ -138,7 +142,7 @@ def publish_msgs(lat1, lon1,lat2, lon2):
     instructions_publisher.publish(instructions_msg)
 
 
-first_messsage = True
+first_message = True
 
 def handle_gps(msg):
     global first_message
