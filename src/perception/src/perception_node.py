@@ -15,7 +15,6 @@ from nav_msgs.msg import OccupancyGrid
 import math
 from collections import deque
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 rospy.init_node('perception_node', anonymous=True)
