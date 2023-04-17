@@ -15,7 +15,6 @@ from nav_msgs.msg import OccupancyGrid
 import math
 from collections import deque
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 rospy.init_node('perception_node', anonymous=True)
@@ -204,17 +203,22 @@ def generate_ray_casting_grid_map(ox, oy, xy_resolution, breshen=True):
             occupancy_map[ix + 1][iy + 1] = 1.0  # extend the occupied area
     return occupancy_map, min_x, max_x, min_y, max_y, xy_resolution, center_x, center_y
 
-def row_to_x(map_width, row, resolution):
-    return( resolution*( -( ( map_width ) - 1 ) /2.0 + row ) )
+def row_to_x(center_x, resolution):
+    return( - resolution * center_x )
 
-def col_to_y(map_height, col, resolution):
-    return (resolution*( -( ( map_height ) - 1 ) /2.0 + col ) )
+def col_to_y(center_y, resolution):
+    return ( - resolution * center_y)
 
 
 
 def callback(data):
     # print out time taken to send data
     print("received data:")
+    global angles
+    global distances
+
+    angles = []
+    distances = []
     # NDArray of angles and distances are collected:
     for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
         if(data.ranges[i] <= data.range_max and data.ranges[i] >= data.range_min): 
@@ -243,9 +247,14 @@ def callback(data):
     grid.info.width = xy_res[1]
     grid.info.height = xy_res[0]
     # calculate offset 
-    print(xy_res[1]-center_x) 
-    grid.info.origin.position.x = row_to_x(xy_res[1], (xy_res[1])/2-center_x, xy_resolution)
-    grid.info.origin.position.y = col_to_y(xy_res[0], (xy_res[0])/2-center_y, xy_resolution)
+    print("center", center_x, center_y)
+    print("res", xy_res[1], xy_res[0])
+    grid.info.origin.position.x = row_to_x(center_x, xy_resolution)
+    #grid.info.origin.position.x = row_to_x(xy_res[1], (xy_res[1])/2-center_x, xy_resolution)
+    
+    grid.info.origin.position.y = col_to_y(center_y, xy_resolution)
+
+    #grid.info.origin.position.y = col_to_y(xy_res[0], (xy_res[0])/2-center_y, xy_resolution)
     grid.header.frame_id = "world"
 
     #print("occupancy map:", occupancy_map, len(occupancy_map))

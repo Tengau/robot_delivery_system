@@ -1,24 +1,24 @@
 import cv2
 import time
 import numpy as np
-import math
 
 def main():
     # define a video capture object
     vid = cv2.VideoCapture(0)
-    
+    print("videoCapture defined")
     while(True):
-        
         # Capture the video frame
         # by frame
         ret, frame = vid.read()
-
+        printf("camera data read")
         #frame = detect_obstacles(frame)
+        
         frame = detect_pedestrian_lane(frame)
-        frame = detect_obstacles(frame)
-    
+        print("lane detection done")
+        #frame = detect_obstacles(frame)
+        #print("obstacle detection done")
         # Display the resulting frame
-        cv2.imshow('frame', frame)
+        # cv2.imshow('frame', frame)
         
         
         # the 'q' button is set as the
@@ -26,12 +26,91 @@ def main():
         # desired button of your choice
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-        time.sleep(0)
+        # time.sleep(0.1)
     
     # After the loop release the cap object
     vid.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
+    
+    
+def region_of_interest(img, vertices):
+    mask = np.zeros_like(img)
+    
+    match_mask_color = 255
+    
+    cv2.fillPoly(mask, vertices, match_mask_color)
+    #masked_image = cv2.bitwise_and(img, mask)
+    return mask
+
+def detect_pedestrian_lane(image):
+    height = image.shape[0]
+    width = image.shape[1]
+    
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    
+    # cloudy day, no shadows:
+    #lower_pavement = np.array([0, 0, 160])
+    #upper_pavement = np.array([90, 40, 210])
+    
+    # sunny day, minimal shadows:
+    lower_pavement = np.array([0, 9, 60])
+    upper_pavement = np.array([45, 30, 255])
+
+    mask = cv2.inRange(hsv, lower_pavement, upper_pavement)
+    
+    #define kernel size  
+    kernel = np.ones((7,7),np.uint8)
+
+    # Remove unnecessary noise from mask
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
+    
+    # only the pavement:
+    segmented_image = cv2.bitwise_and(image, image, mask=mask)
+    
+    
+    # Find contours from the mask
+    contours, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    max_contour = []
+    
+    max_area = 0
+    for contour in contours:
+        current_area = cv2.contourArea(contour)
+        if (current_area > max_area):
+            max_area = current_area
+            max = contour
+            x, y, w, h = cv2.boundingRect(max)
+    
+    max_contour.append(max)
+    output = cv2.drawContours(image, max_contour, 0, (255, 0, 0), 2)
+    pts = np.float32([[x+w*.45, y+h*.01],[x + w *.55, y + h*.01],[x + w, y + h],[x, y + h]])
+   # print("points lane: ", pts)
+    #output = cv2.fillPoly(image, [pts.astype(int)], (0,0,255))
+    output = cv2.rectangle(image, (x,y), (x+w, y+h), (0, 255, 0), 2)
+    #print(contours)
+    
+    pts2 = np.float32([[0,0],[width,0],[0,height],[width,height]])
+    M = cv2.getPerspectiveTransform(pts,pts2)
+    dst = cv2.warpPerspective(image,M,(width,height))
+
+    
+    '''
+    height = image.shape[0]
+    width = image.shape[1]
+    region_of_interest_vertices = [
+        (0, height),
+        (width/2, height/4),
+        (width, height),
+    ]
+    
+    mask_triangle = region_of_interest( image, np.array([region_of_interest_vertices], np.int32),)
+
+    masked_image = cv2.bitwise_and(output, mask_triangle)
+    #blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    #edges = cv2.Canny(blur, 50, 100)
+    '''
+    return output
 
 def detect_obstacles(image,min_area=500):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -44,124 +123,6 @@ def detect_obstacles(image,min_area=500):
             x, y, w, h = cv2.boundingRect(cnt)
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
     return image
-
-def region_of_interest(img, vertices):
-    mask = np.zeros_like(img)
-    
-    match_mask_color = 255
-    
-    cv2.fillPoly(mask,vertices, match_mask_color)
-    masked_image = cv2.bitwise_and(img, mask)
-    return masked_image
-    
-    
-def detect_pedestrian_lane(image):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    edges = cv2.Canny(blur, 50, 150)
-    
-    height = image.shape[0]
-    width = image.shape[1]
-    region_of_interest_vertices = [
-        (0, height-200),
-        (width/2, height/4),
-        (width, height-200),
-    ]
-    
-    cropped_image = region_of_interest(
-        edges,
-        np.array(
-            [region_of_interest_vertices],
-            np.int32
-        ),
-    )
-    
-    
-    #lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi/180, threshold=100, minLineLength=100, maxLineGap=50)
-    lines = cv2.HoughLinesP(cropped_image, rho=1, theta=np.pi/180, threshold=100, minLineLength=10, maxLineGap=100)
-
-    if lines is not None:
-        for line in lines:
-            x1, y1, x2, y2 = line[0]
-            angle = math.degrees(math.atan2(y2-y1, x2-x1))
-            #if angle < 40 and angle > 30:
-            cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 4)
-            #elif angle > -40 and angle < -30:
-             #   cv2.line(image, (x1, y1), (x2, y2), (0, 255, 0), 4)
-    return image
-
-'''
-def grass_vs_road(image):
-    # Convert image to HSV color space
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-
-    # Define range of grass color in HSV
-    lower_grass = np.array([35, 50, 50])
-    upper_grass = np.array([80, 255, 255])
-
-    # Define range of road color in HSV
-    lower_road = np.array([0, 0, 0])
-    upper_road = np.array([180, 50, 50])
-
-    # Threshold the HSV image to get binary masks for grass and road
-    mask_grass = cv2.inRange(hsv, lower_grass, upper_grass)
-    mask_road = cv2.inRange(hsv, lower_road, upper_road)
-
-    # Apply morphology to remove noise
-    kernel = np.ones((5, 5), np.uint8)
-    mask_grass = cv2.morphologyEx(mask_grass, cv2.MORPH_OPEN, kernel)
-    mask_road = cv2.morphologyEx(mask_road, cv2.MORPH_OPEN, kernel)
-
-    # Calculate the percentage of grass and road in the image
-    total_pixels = image.shape[0] * image.shape[1]
-    grass_pixels = cv2.countNonZero(mask_grass)
-    road_pixels = cv2.countNonZero(mask_road)
-    grass_percent = grass_pixels / total_pixels * 100
-    road_percent = road_pixels / total_pixels * 100
-
-    # Determine which area (grass or road) has a higher percentage in the image
-    if grass_percent > road_percent:
-        return "grass"
-    else:
-        return "road"
-
-def detect_road(image):
-    # Convert the image to grayscale
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
-    # Apply Gaussian blur to the grayscale image
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
-
-    # Apply Canny edge detection to the blurred image
-    edges = cv2.Canny(blur, 50, 150)
-
-    # Apply Hough transform to detect lines in the image
-    lines = cv2.HoughLinesP(edges, rho=1, theta=np.pi/180, threshold=100, minLineLength=100, maxLineGap=50)
-
-    # Create an empty mask with the same dimensions as the image
-    mask = np.zeros_like(image)
-
-    # Define the boundaries of the purple road boundary
-    left_boundary = int(image.shape[1] * 0.4)
-    right_boundary = int(image.shape[1] * 0.6)
-
-    # Draw the purple boundary over the detected road
-    if lines is not None:
-        for line in lines:
-            x1, y1, x2, y2 = line[0]
-            if y1 > image.shape[0] * 0.6 and y2 > image.shape[0] * 0.6:
-                if x1 > left_boundary and x1 < right_boundary:
-                    cv2.line(mask, (x1, y1), (x2, y2), (255, 0, 255), 10)
-                if x2 > left_boundary and x2 < right_boundary:
-                    cv2.line(mask, (x1, y1), (x2, y2), (255, 0, 255), 10)
-
-    # Apply a bitwise AND operation to the original image and the mask to keep the robot within the purple road boundary
-    result = cv2.bitwise_and(image, mask)
-
-    return result
-'''
-
-
 
 if __name__ == '__main__':
     main()
