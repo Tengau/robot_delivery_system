@@ -14,7 +14,18 @@ from localization.msg import Instructions
 UART.setup("UART5")
 serial = serial.Serial(port = '/dev/ttyO5', baudrate = 9600 )
 
+locations = {
+    0: (0,0),
+    1: (0,0),
+    2: (0,0),
+    3: (0,0),
+    4: (0,0)
+}
+
+destination = (0,1)
+
 list_of_waypoints = []
+instructions = []
 
 compass_readings = [0,0,0,0,0,0,0,0,0,0]
 compass_count = 0
@@ -27,26 +38,32 @@ gps_received_10 = False
 
 estimated_pose = (0,0,0)
 
-instructions = []
-
 obstacleFree = True
 
 def clamp(angle):
-    if angle > 360:
+    if angle > 180:
         return angle - 360
-    if angle < 0:
+    if angle < -180:
         return angle + 360
     return angle
 
+def avg_com_helper(n):
+    x = 0
+    y = 0
+    for i in range(n):
+        x = x + math.cos(compass_readings[i] * math.pi / 180.0)
+        y = y + math.sin(compass_readings[i] * math.pi / 180.0)
+    return math.atan2(y/n,x/n)
+
 def average_compass():
     if compass_received_10:
-        return sum(compass_readings)/10
+        return avg_com_helper(10)
     else:
-        if compass_count == 0:
+        if compass_count == 0
             return 0
         else:
-            return sum(compass_readings)/compass_count
-
+            return avg_com_helper(compass_count)
+    
 def average_gps():
     '''x = 0
     y = 0
@@ -63,19 +80,12 @@ def average_gps():
             return (x/gps_count,y/gps_count)'''
     return gps_readings
 
-
-#########
-
-def orient(target_angle):
-    pass
-
-
 def handle_compass(msg):
     global compass_count
     global compass_readings
     global compass_received_10
 
-    compass_readings[compass_count] = clamp(msg.data + 20)
+    compass_readings[compass_count] = -clamp(msg.data + 20)
     compass_count = compass_count + 1
     
     if compass_count == 10:
@@ -98,7 +108,6 @@ def handle_robot_pose(msg):
     
     gps_readings =  (msg.pose.position.x, msg.pose.position.y)
 
-    
     '''gps_readings[gps_count] = (msg.pose.position.x, msg.pose.position.y)
     gps_count = gps_count + 1
 
@@ -109,7 +118,6 @@ def handle_robot_pose(msg):
 
     #print("gps:",average_gps())
     
-
 def handle_estimated_pose(msg):
     global estimated_pose
     estimated_pose = (msg.x,msg.y,msg.z)
@@ -118,9 +126,9 @@ def handle_instructions(msg):
     global instructions
     instructions = msg.instructions
     print(instructions)
-    while len(list_of_waypoints) == 0:
-        continue
-    movement(instructions)
+    #while len(list_of_waypoints) == 0:
+        #continue
+    #movement(instructions)
 
 def handle_occ_grid(msg):
     width = msg.info.width
@@ -151,9 +159,7 @@ def handle_occ_grid(msg):
     
     #for y in range(0, height):
         #print(msg.data[y*width: (y + 1)*width])
-
-
-
+        
     for row in range(int(origin_y), int(origin_y + y_limit)):
         for col in range(int(origin_x - x_limit), int(origin_x + x_limit)):
     #for row in range(0, int(height)):
@@ -167,8 +173,8 @@ def handle_occ_grid(msg):
 
 def move(v, w):
     # if an obstacle is detected, dont move
-    #if(!obstacleFree):
-        #v = "0.0"
+    if(!obstacleFree):
+        v = 0
         #w = "0.0"
     command = '!'+ str(v) + '@' + str(w) + '#'
     serial.write(command.encode('utf-8'))    
@@ -216,6 +222,45 @@ def movement(instructions):
         
         move(0,0) #stop()
 
+def target_angle():
+    x1 = estimated_pose[0]
+    y1 = estimated_pose[1]
+    x2, y2 = destination
+    return math.atan2(y2 - y1, x2 - x1) * 180 / math.pi
+    
+def orient():
+    while True:
+        angle = target_angle() - average_compass()
+        w = angle * 0.4 / 180.0        
+        move(0,w)
+        if angle < 2 or angle > -2:
+            break
+            
+def calculate_distance():
+    x1 = estimated_pose[0]
+    y1 = estimated_pose[1]
+    x2, y2 = destination
+    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
+            
+def translate():
+    count = 0
+    while True:
+        distance = calculate_distance()
+        v = distance * 0.4
+        if v > 0.4:
+            v = 0.4
+        move(v,0)
+        if distance < 0.05:
+            break
+        
+        count = count + 1
+        count = count % 30 
+        if count == 0:
+            orient()
+            
+ def go_to_waypoint():
+    orient()
+    translate()
 
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
@@ -225,5 +270,7 @@ if __name__ == "__main__":
     rospy.Subscriber("instructions", Instructions, handle_instructions)
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
     rospy.Subscriber("/map", OccupancyGrid, handle_occ_grid)    
-
+    
+    go_to_waypoint()
+    
     rospy.spin()
