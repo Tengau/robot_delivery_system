@@ -63,7 +63,11 @@ int main(int argc, char **argv)
 
 		#std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180.0 / M_PI << std::endl;  
  		
-		
+		geometry_msgs::Point msg;
+		msg.x = x;
+		msg.y = y;
+		msg.z = theta
+		estimated_pose_publisher.publish(msg);
 		
 		l_prev = l;
 		r_prev = r;
