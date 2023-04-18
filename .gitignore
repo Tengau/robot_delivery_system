@@ -1,5 +1,5 @@
 .catkin_workspace
 build
 devel
-build_isolated/
-devel_isolated/
+build_isolated
+devel_isolated

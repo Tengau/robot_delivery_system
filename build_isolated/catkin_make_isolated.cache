@@ -1,2 +1,0 @@
-3irobotics-delta2a-sdk:localization:navigation:path_planning:perception:simulation
--G Unix Makefiles -DCATKIN_DEVEL_PREFIX=/home/debian/robot_delivery_system/devel_isolated -DCMAKE_INSTALL_PREFIX=/home/debian/robot_delivery_system/install_isolated

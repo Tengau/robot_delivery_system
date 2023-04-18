@@ -1,8 +1,0 @@
-prefix=/home/debian/robot_delivery_system/devel_isolated/delta_lidar
-
-Name: delta_lidar
-Description: Description of delta_lidar
-Version: 1.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
