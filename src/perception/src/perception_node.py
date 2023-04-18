@@ -249,10 +249,12 @@ def callback(data):
     # calculate offset 
     print("center", center_x, center_y)
     print("res", xy_res[1], xy_res[0])
-    grid.info.origin.position.x = row_to_x(center_x, xy_resolution)
+    grid.info.origin.position.x = center_x
+    #row_to_x(center_x, xy_resolution)
     #grid.info.origin.position.x = row_to_x(xy_res[1], (xy_res[1])/2-center_x, xy_resolution)
     
-    grid.info.origin.position.y = col_to_y(center_y, xy_resolution)
+    grid.info.origin.position.y = center_y
+    #col_to_y(center_y, xy_resolution)
 
     #grid.info.origin.position.y = col_to_y(xy_res[0], (xy_res[0])/2-center_y, xy_resolution)
     grid.header.frame_id = "world"

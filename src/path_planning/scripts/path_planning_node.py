@@ -64,6 +64,12 @@ def average_gps():
     return gps_readings
 
 
+#########
+
+def orient(target_angle):
+    pass
+
+
 def handle_compass(msg):
     global compass_count
     global compass_readings
@@ -77,7 +83,7 @@ def handle_compass(msg):
     
     compass_count = compass_count % 10
 
-    print("compass:",average_compass())
+    #print("compass:",average_compass())
 
 def handle_path(msg):
     global list_of_waypoints
@@ -116,13 +122,15 @@ def handle_instructions(msg):
         continue
     movement(instructions)
 
-'''def handle_occ_grid(msg):
-    width = data.info.width
-    height = data.info.height
+def handle_occ_grid(msg):
+    width = msg.info.width
+    height = msg.info.height
 
-    origin_x = data.info.origin.position.x
-    origin_y = data.info.origin.position.y
-
+    origin_x = msg.info.origin.position.x
+    origin_y = msg.info.origin.position.y
+    
+    #       450 500     250 250     
+    print(width, height, origin_x, origin_y)
     # checks for points in front of the robot
     #     xx|xx
     #     xx|xx
@@ -134,21 +142,28 @@ def handle_instructions(msg):
 
     print("Checking for obstacle...")
     global obstacleFree
-    break_out_flag = False
+    y_limit = 2/msg.info.resolution
+    x_limit = 1/msg.info.resolution
     # note:
     # - need to doublecheck which direction the robot is going in
     # - need to double check width and height is--> just make sure its
     #   not some crazy number
-    for row in range(origin_y, height):
-        for col in range(origin_x - width/2.0, origin_x + width/2.0):
-            if(data->data[row+col] > 50):
-                print("Object detected at", col, width)
+    
+    #for y in range(0, height):
+        #print(msg.data[y*width: (y + 1)*width])
+
+
+
+    for row in range(int(origin_y), int(origin_y + y_limit)):
+        for col in range(int(origin_x - x_limit), int(origin_x + x_limit)):
+    #for row in range(0, int(height)):
+    #    for col in range(0, int(width)):
+            if(msg.data[row*width +col] > 50):
+                print("Object detected at", row, col)
                 obstacleFree = False
-                break_out_flag = True
-                break
-        if (break_out_flag):
-            break
-    obstacleFree = True'''
+                return
+    obstacleFree = True
+    print("obstacle free?", obstacleFree)
 
 def move(v, w):
     # if an obstacle is detected, dont move
@@ -181,7 +196,7 @@ def movement(instructions):
             print("angle diff:", angledifference)
 
             if angledifference < 0:
-                move(0,0.2) #turn right ()
+                move(0,0.2) #turn right 
 
             else:
                 move(0, -0.2) #turn left ()
@@ -209,6 +224,6 @@ if __name__ == "__main__":
     rospy.Subscriber("compass", Float64, handle_compass)
     rospy.Subscriber("instructions", Instructions, handle_instructions)
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    #rospy.Subscriber("/map". OccupancyGrid, handle_occ_grid)    
+    rospy.Subscriber("/map", OccupancyGrid, handle_occ_grid)    
 
     rospy.spin()
