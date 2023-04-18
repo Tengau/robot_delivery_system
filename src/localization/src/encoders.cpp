@@ -28,7 +28,7 @@ int main(int argc, char **argv)
 	double y = 0.0;
 	double theta = 0.0;
 
-	double wheel_radius = 0.0381;
+	double wheel_radius = 0.0419;
 	double robot_width = 0.6096;
 
 	int freq = 20;
@@ -40,10 +40,10 @@ int main(int argc, char **argv)
 		std::cout << "left: " << l << " right: " << r << std::endl;  
 		
 		int dl = l - l_prev;
-		int dr = l - r_prev;
+		int dr = r - r_prev;
 
-		double vl = dl * 2.0 * M_PI / 2100.0;
-		double vr = dr * 2.0 * M_PI / 2100.0;
+		double vl = dl * 2.0 * M_PI / 2200.0;
+		double vr = dr * 2.0 * M_PI / 2200.0;
 
 		double dx = wheel_radius * (vl + vr) * cos(theta) / 2.0; 
 		double dy = wheel_radius * (vl + vr)  * sin(theta) / 2.0;
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		else if (theta < -1*M_PI)	
 			theta += 2 * M_PI;
 
-		std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180 / M_PI << std::endl;  
+		std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180.0 / M_PI << std::endl;  
  
 		l_prev = l;
 		r_prev = r;

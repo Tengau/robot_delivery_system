@@ -8,8 +8,9 @@ from geometry_msgs.msg import Quaternion
 from localization.srv import *
 import math
 
-x = 0
-y = 0
+    
+robot_pose_publisher = rospy.Publisher("robot_pose", PoseStamped, queue_size=10)
+
 theta = 0 
 
 def handle_compass(msg):
@@ -29,6 +30,17 @@ def handle_gps(msg):
     x = res.position.x
     y = res.position.y
 
+    pose = PoseStamped()
+    pose.header.stamp = rospy.get_rostime()
+    pose.header.frame_id = "world"
+
+    pose.pose.position.x = x
+    pose.pose.position.y = y 
+
+    pose.pose.orientation = get_orientation()
+        
+    robot_pose_publisher.publish(pose)
+        
 def get_orientation():
     q = Quaternion()
     q.w = math.cos(theta/2)
@@ -39,9 +51,10 @@ if __name__ == '__main__':
     rospy.init_node("robot_pose")
     rospy.Subscriber("compass", Float64, handle_compass)
     rospy.Subscriber("gps", Point, handle_gps)
-    robot_pose_publisher = rospy.Publisher("robot_pose", PoseStamped, queue_size=10)
 
-    rate = rospy.Rate(10) # 10hz
+    rospy.spin()
+
+    '''rate = rospy.Rate(10) # 10hz
     while not rospy.is_shutdown():
         
         pose = PoseStamped()
@@ -54,4 +67,4 @@ if __name__ == '__main__':
         pose.pose.orientation = get_orientation()
         
         robot_pose_publisher.publish(pose)
-        rate.sleep()
+        rate.sleep()'''

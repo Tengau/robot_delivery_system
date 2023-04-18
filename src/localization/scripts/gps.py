@@ -48,7 +48,7 @@ if __name__ == '__main__':
             
                 point.x =  lat_sign * (lat_deg + lat_min)
                 point.y =  lon_sign * (lon_deg + lon_min)
-            
+                print("GPS:",point.x,point.y) 
                 gps_publisher.publish(point)
         rate.sleep()
 
