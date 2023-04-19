@@ -5,20 +5,21 @@ import numpy as np
 def main():
     # define a video capture object
     vid = cv2.VideoCapture(0)
-    print("videoCapture defined")
+    print("VideoCapture defined successfully.")
     while(True):
         # Capture the video frame
         # by frame
         ret, frame = vid.read()
-        printf("camera data read")
-        #frame = detect_obstacles(frame)
-        
+        print("********* 1. Camera data read successfully *************")
+        print("********* 2. Lane detection in progress ... **********")
         frame = detect_pedestrian_lane(frame)
-        print("lane detection done")
-        #frame = detect_obstacles(frame)
-        #print("obstacle detection done")
+        print("********* Lane detection done... **********")
+        print("********* 3. Obstacle detection in progress ... ********")
+        frame = detect_obstacles(frame)
+        print("********* Obstacle detection done ********")
+
         # Display the resulting frame
-        # cv2.imshow('frame', frame)
+        cv2.imshow('frame', frame)
         
         
         # the 'q' button is set as the
@@ -26,7 +27,7 @@ def main():
         # desired button of your choice
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-        # time.sleep(0.1)
+        #time.sleep(0.5)
     
     # After the loop release the cap object
     vid.release()
@@ -44,9 +45,6 @@ def region_of_interest(img, vertices):
     return mask
 
 def detect_pedestrian_lane(image):
-    height = image.shape[0]
-    width = image.shape[1]
-    
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     
     # cloudy day, no shadows:
@@ -85,43 +83,70 @@ def detect_pedestrian_lane(image):
     max_contour.append(max)
     output = cv2.drawContours(image, max_contour, 0, (255, 0, 0), 2)
     pts = np.float32([[x+w*.45, y+h*.01],[x + w *.55, y + h*.01],[x + w, y + h],[x, y + h]])
-   # print("points lane: ", pts)
-    #output = cv2.fillPoly(image, [pts.astype(int)], (0,0,255))
+    # Draw rectangle around the lane
     output = cv2.rectangle(image, (x,y), (x+w, y+h), (0, 255, 0), 2)
-    #print(contours)
-    
+    # Draw green lane
+    # output = cv2.fillPoly(image, [pts.astype(int)], (0,255,0))
+
+    """
     pts2 = np.float32([[0,0],[width,0],[0,height],[width,height]])
     M = cv2.getPerspectiveTransform(pts,pts2)
     dst = cv2.warpPerspective(image,M,(width,height))
+    """
+    return output
 
+def detect_obstacles(image,min_area=2000):
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
-    '''
+    # Define area of interest triangle/lane
     height = image.shape[0]
     width = image.shape[1]
     region_of_interest_vertices = [
         (0, height),
-        (width/2, height/4),
+        (width/2, height/3),
         (width, height),
     ]
     
-    mask_triangle = region_of_interest( image, np.array([region_of_interest_vertices], np.int32),)
+    mask_triangle = region_of_interest(gray, np.array([region_of_interest_vertices], np.int32))
 
-    masked_image = cv2.bitwise_and(output, mask_triangle)
-    #blur = cv2.GaussianBlur(gray, (5, 5), 0)
-    #edges = cv2.Canny(blur, 50, 100)
-    '''
-    return output
+    masked_image = cv2.bitwise_and(gray, mask_triangle)
+    cv2.imshow("frame2", masked_image)
 
-def detect_obstacles(image,min_area=500):
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    blur = cv2.GaussianBlur(gray, (5, 5), 0)
+    blur = cv2.GaussianBlur(masked_image, (5, 5), 0)
     edges = cv2.Canny(blur, 50, 150)
+
+    # Flip the image vertically
+    # gray = cv2.flip(gray, 1)
+
     contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     for cnt in contours:
-        approx = cv2.approxPolyDP(cnt, 0.01*cv2.arcLength(cnt, True), True)
+        # Approximate the contour with a polygon
+        epsilon = 0.1*cv2.arcLength(cnt,True)
+        approx = cv2.approxPolyDP(cnt,epsilon,True)        
         if len(approx) > 3 and cv2.contourArea(cnt) > min_area:
             x, y, w, h = cv2.boundingRect(cnt)
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
+            print("*** Obstacle detected!")
+            # If obstacles are detected, write "STOP" on the frame
+            cv2.putText(image, "STOP", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+
+        # Detect stairs and ignore small contours
+        # Check if the polygon is a rectangle with 4 vertices
+        if len(approx) == 4 and cv2.contourArea(cnt) > 1000:
+            x, y, w, h = cv2.boundingRect(cnt)
+            aspect_ratio = float(w)/h
+            #print(aspect_ratio)
+            # Check if the rectangle is roughly the size and shape of stairs
+            if aspect_ratio > 2 and aspect_ratio < 7:
+                cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 255), 2)
+                # If stairs are detected, write "CLEAR" on the frame
+                cv2.putText(image, "STOP : STAIRS", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+
+        else:
+            print("*** No obstacle detected!")
+            # If no obstacle is detected, write "CLEAR" on the frame
+            cv2.putText(image, "CLEAR", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 2)
+        
     return image
 
 if __name__ == '__main__':

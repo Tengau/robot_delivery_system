@@ -20,10 +20,10 @@ def main():
         print("ultrasound loop is running...")
         # Read the distance measurement from the Arduino
         distance = ser.readline().strip()
-        
         # Print the distance measurement
         print("Object is ",distance," cm away.")
-
+       
+        # distance = Object is  b'Distances: 0.00, 0.00'  cm away.
         # for future array implementation:
         #for i in range(num_us):
         #    arr[i] = distance
