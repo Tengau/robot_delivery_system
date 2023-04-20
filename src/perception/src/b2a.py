@@ -27,6 +27,10 @@ def main():
         print("Object is ",distance," cm away.")
         
 
+        # Print the distance measurement
+        print("Object is ",distance," cm away.")
+       
+        # distance = Object is  b'Distances: 0.00, 0.00'  cm away.
         # for future array implementation:
         #for i in range(num_us):
         #    arr[i] = distance

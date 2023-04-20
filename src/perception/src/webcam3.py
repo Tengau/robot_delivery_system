@@ -1,77 +1,72 @@
 import cv2
 import time
 import numpy as np
+import rospy
+from std_msgs.msg import String
+
+# Initialize ROS node and publisher
+rospy.init_node('image_processing', anonymous=True)
+pub = rospy.Publisher('image_info', String, queue_size=10)
 
 def main():
-    # define a video capture object
-    vid = cv2.VideoCapture(0)
+    # Define a video capture object
+    vid = cv2.VideoCapture(r'D:\Academics\SPRING 2023\ECE349\Senior-design\test-videos\2.MOV')
     print("VideoCapture defined successfully.")
-    while(True):
+
+    while not rospy.is_shutdown():
         # Capture the video frame
-        # by frame
         ret, frame = vid.read()
         print("********* 1. Camera data read successfully *************")
         print("********* 2. Lane detection in progress ... **********")
-        frame = detect_pedestrian_lane(frame)
+        lane_info = detect_pedestrian_lane(frame)
         print("********* Lane detection done... **********")
         print("********* 3. Obstacle detection in progress ... ********")
-        frame = detect_obstacles(frame)
+        obstacle_info = detect_obstacles(frame)
         print("********* Obstacle detection done ********")
+
+        # Publish image information
+        pub.publish(lane_info + "\n" + obstacle_info)
+
+        # Spin once to allow ROS to process incoming messages
+        rospy.spinOnce()
 
         # Display the resulting frame
         cv2.imshow('frame', frame)
-        
-        
-        # the 'q' button is set as the
-        # quitting button you may use any
+
+        # The 'q' button is set as the quitting button you may use any
         # desired button of your choice
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
-        #time.sleep(0.5)
-    
+
     # After the loop release the cap object
     vid.release()
+
     # Destroy all the windows
     cv2.destroyAllWindows()
-    
-    
-def region_of_interest(img, vertices):
-    mask = np.zeros_like(img)
-    
-    match_mask_color = 255
-    
-    cv2.fillPoly(mask, vertices, match_mask_color)
-    #masked_image = cv2.bitwise_and(img, mask)
-    return mask
 
-def detect_pedestrian_lane(image):
+def detect_pedestrian_lane(image, pub):
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    
-    # cloudy day, no shadows:
-    #lower_pavement = np.array([0, 0, 160])
-    #upper_pavement = np.array([90, 40, 210])
-    
-    # sunny day, minimal shadows:
+
+    # Define lower and upper bounds for the pavement
     lower_pavement = np.array([0, 9, 60])
     upper_pavement = np.array([45, 30, 255])
 
     mask = cv2.inRange(hsv, lower_pavement, upper_pavement)
-    
-    #define kernel size  
-    kernel = np.ones((7,7),np.uint8)
+
+    # Define kernel size  
+    kernel = np.ones((7, 7), np.uint8)
 
     # Remove unnecessary noise from mask
     mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel)
     mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel)
-    
-    # only the pavement:
+
+    # Only the pavement:
     segmented_image = cv2.bitwise_and(image, image, mask=mask)
-    
-    
+
     # Find contours from the mask
     contours, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     max_contour = []
-    
+
     max_area = 0
     for contour in contours:
         current_area = cv2.contourArea(contour)
@@ -79,14 +74,18 @@ def detect_pedestrian_lane(image):
             max_area = current_area
             max = contour
             x, y, w, h = cv2.boundingRect(max)
-    
+
     max_contour.append(max)
     output = cv2.drawContours(image, max_contour, 0, (255, 0, 0), 2)
     pts = np.float32([[x+w*.45, y+h*.01],[x + w *.55, y + h*.01],[x + w, y + h],[x, y + h]])
+
     # Draw rectangle around the lane
-    output = cv2.rectangle(image, (x,y), (x+w, y+h), (0, 255, 0), 2)
+    output = cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 0), 2)
     # Draw green lane
-    # output = cv2.fillPoly(image, [pts.astype(int)], (0,255,0))
+    # output = cv2.fillPoly(image, [pts.astype(int)], (0, 255, 0))
+
+    # Publish a ROS message to a topic with the lane position
+    pub.publish("Lane position: ({}, {})".format(x, y))
 
     """
     pts2 = np.float32([[0,0],[width,0],[0,height],[width,height]])
@@ -95,7 +94,13 @@ def detect_pedestrian_lane(image):
     """
     return output
 
-def detect_obstacles(image,min_area=2000):
+def region_of_interest(img, vertices):
+    mask = np.zeros_like(img)
+    match_mask_color = 255
+    cv2.fillPoly(mask, vertices, match_mask_color)
+    return mask
+
+def detect_obstacles(image,min_area=1000):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     
     # Define area of interest triangle/lane
@@ -103,7 +108,7 @@ def detect_obstacles(image,min_area=2000):
     width = image.shape[1]
     region_of_interest_vertices = [
         (0, height),
-        (width/2, height/3),
+        (width/2, height/4),
         (width, height),
     ]
     
@@ -126,9 +131,9 @@ def detect_obstacles(image,min_area=2000):
         if len(approx) > 3 and cv2.contourArea(cnt) > min_area:
             x, y, w, h = cv2.boundingRect(cnt)
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
-            print("*** Obstacle detected!")
-            # If obstacles are detected, write "STOP" on the frame
-            cv2.putText(image, "STOP", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+            rospy.loginfo("*** Obstacle detected!")
+            # If obstacles are detected, publish "STOP" message
+            pub.publish("STOP")
 
         # Detect stairs and ignore small contours
         # Check if the polygon is a rectangle with 4 vertices
@@ -139,15 +144,16 @@ def detect_obstacles(image,min_area=2000):
             # Check if the rectangle is roughly the size and shape of stairs
             if aspect_ratio > 2 and aspect_ratio < 7:
                 cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 255), 2)
-                # If stairs are detected, write "CLEAR" on the frame
-                cv2.putText(image, "STOP : STAIRS", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+                # If stairs are detected, publish "STOP : STAIRS" message
+                rospy.loginfo("*** Stairs detected!")
+                pub.publish("STOP : STAIRS")
 
         else:
-            print("*** No obstacle detected!")
-            # If no obstacle is detected, write "CLEAR" on the frame
+            rospy.loginfo("*** No obstacle detected!")
+            # If no obstacle is detected, publish "CLEAR" message
+            pub.publish("CLEAR")
+            # Write "CLEAR" on the frame
             cv2.putText(image, "CLEAR", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 2)
         
     return image
 
-if __name__ == '__main__':
-    main()
