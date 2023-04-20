@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 		int l= rc_encoder_eqep_read(2);
 		int r = -1*rc_encoder_eqep_read(3);
 
-		#std::cout << "left: " << l << " right: " << r << std::endl;  
+		std::cout << "left: " << l << " right: " << r << std::endl;  
 		
 		int dl = l - l_prev;
 		int dr = r - r_prev;
@@ -61,12 +61,12 @@ int main(int argc, char **argv)
 		else if (theta < -1*M_PI)	
 			theta += 2 * M_PI;
 
-		#std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180.0 / M_PI << std::endl;  
+		std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180.0 / M_PI << std::endl;  
  		
 		geometry_msgs::Point msg;
 		msg.x = x;
 		msg.y = y;
-		msg.z = theta
+		msg.z = theta * 180.0 / M_PI;
 		estimated_pose_publisher.publish(msg);
 		
 		l_prev = l;

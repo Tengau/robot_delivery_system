@@ -3,5 +3,5 @@
     <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
     <param name="frame_id"            type="string" value="laser"/>
   </node>
-  <node name="perception"  pkg="perception"  type="perception_node.py" output="screen" />
+  <node name="perception"  pkg="perception"  type="perception_node_simple.py" output="screen" />
 </launch> 
