@@ -281,14 +281,11 @@ if __name__ == "__main__":
     rospy.init_node("motion_commands")
     #rospy.Subscriber("path", Path, handle_path)
     #rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
-    #rospy.Subscriber("compass", Float64, handle_compass)
+    rospy.Subscriber("compass", Float64, handle_compass)
     #rospy.Subscriber("instructions", Instructions, handle_instructions)
     
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)    
-    
-    print("start")
-    go_to_waypoint()
+    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)
     
     initial_orient = True
     
