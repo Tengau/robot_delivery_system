@@ -1,0 +1,5 @@
+<launch>
+	<node type="compass" name="compass_node" pkg="localization" /> 
+	<node type="encoders" name="encoders_node" pkg="localization" output="screen" />  	
+</launch>
+
