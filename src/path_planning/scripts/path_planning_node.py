@@ -185,7 +185,7 @@ def handle_occ_grid(msg):
                 return
     obstacleFree = True
     print("obstacle free?", obstacleFree)
-'''
+
 def move(v, w):
     # if an obstacle is detected, dont move
     if(obstacle):
@@ -193,7 +193,7 @@ def move(v, w):
         w = 0
     command = '!'+ str(v) + '@' + str(w) + '#'
     serial.write(command.encode('utf-8'))    
-    time.sleep(0.1)
+    #time.sleep(0.1)
 
 def angledif(point):
     x1, y1 = average_gps()
@@ -236,7 +236,8 @@ def movement(instructions):
             distance_to_go = distancedif(list_of_waypoints[i.to_index])
         
         move(0,0) #stop()
-
+'''
+        
 def target_angle():
     x1 = estimated_pose[0]
     y1 = estimated_pose[1]
@@ -244,18 +245,17 @@ def target_angle():
     return math.atan2(y2 - y1, x2 - x1) * 180 / math.pi
     
 def orient():
-    while True:
-        angle = target_angle() - estimated_pose[2]
-        w = -angle * 0.3 / 180.0        
-        if w < 0.15 and w > 0:
-            w = 0.15
-        if w < 0 and w > -0.15:
-            w = -0.15
-        move(0,w)
-        #print("angle:", angle)
-        if angle < 2 and angle > -2:
-            break
-            
+    angle = target_angle() - estimated_pose[2]
+    #print("angle", angle)
+    w = -angle * 0.3 / 180.0        
+    if w < 0.15 and w > 0:
+        w = 0.15
+    if w < 0 and w > -0.15:
+        w = -0.15
+    if angle < 2 and angle > -2:
+        w = 0
+    return w
+        
 def calculate_distance():
     x1 = estimated_pose[0]
     y1 = estimated_pose[1]
@@ -263,30 +263,17 @@ def calculate_distance():
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
             
 def translate():
-    count = 0
-    while True:
-        distance = calculate_distance()
-        v = distance * 0.3
-        if v > 0.3:
-            v = 0.3
-        if v < 0.1:
-            v = 0.1
-        move(v,0)
-        if distance < 0.05:
-            break
-        #print("distance:",distance)
-        
-        count = count + 1
-        count = count % 30 
-        if count == 0:
-            orient()
-            
-def go_to_waypoint():
-     orient()
-     translate()
-     while(True):
-         move(0,0)
-
+    distance = calculate_distance()
+    print("distance:",distance)
+    v = distance * 0.3
+    if v > 0.3:
+        v = 0.3
+    if v < 0.1:
+        v = 0.1
+    if distance < 0.05:
+        v = 0
+    return v
+    
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
     #rospy.Subscriber("path", Path, handle_path)
@@ -300,4 +287,17 @@ if __name__ == "__main__":
     print("start")
     go_to_waypoint()
     
-    rospy.spin()
+    initial_orient = True
+    
+    rate = rospy.Rate(10) # 10Hz
+    while not rospy.is_shutdown():
+        w = orient()
+        if initial_orient:
+            v = 0
+            if w == 0:
+                initial_orient = False
+        else:
+            v = translate()
+        move(v,w)
+        rospy.spinOnce()
+        rate.sleep()
