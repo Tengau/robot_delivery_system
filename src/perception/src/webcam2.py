@@ -2,25 +2,37 @@ import cv2
 import time
 import numpy as np
 
+obstacle_count = 0
+start_time = time.time()
+
 def main():
+    global obstacle_count
+    global start_time
     # define a video capture object
     vid = cv2.VideoCapture(0)
+    #vid = cv2.VideoCapture(r'D:\Academics\SPRING 2023\ECE349\Senior-design\test-videos\eng6.MOV')
     print("VideoCapture defined successfully.")
     while(True):
         # Capture the video frame
         # by frame
         ret, frame = vid.read()
-        print("********* 1. Camera data read successfully *************")
-        print("********* 2. Lane detection in progress ... **********")
+        #print("********* 1. Camera data read successfully *************")
+        #print("********* 2. Lane detection in progress ... **********")
         frame = detect_pedestrian_lane(frame)
-        print("********* Lane detection done... **********")
-        print("********* 3. Obstacle detection in progress ... ********")
+        #print("********* Lane detection done... **********")
+        #print("********* 3. Obstacle detection in progress ... ********")
         frame = detect_obstacles(frame)
-        print("********* Obstacle detection done ********")
+        #frame = detect_obstacles(frame, 1000, 2000)
+        #print("********* Obstacle detection done ********")
 
         # Display the resulting frame
         cv2.imshow('frame', frame)
         
+        # Increase the accuracy of obstacle detection by resetting the count every 3 seconds
+        current_time = time.time()
+        if current_time >= start_time + 1:
+            obstacle_count = 0
+            start_time = current_time
         
         # the 'q' button is set as the
         # quitting button you may use any
@@ -50,10 +62,14 @@ def detect_pedestrian_lane(image):
     # cloudy day, no shadows:
     #lower_pavement = np.array([0, 0, 160])
     #upper_pavement = np.array([90, 40, 210])
+
+    # sunny day:
+    #lower_pavement = np.array([0, 9, 60])
+    #upper_pavement = np.array([45, 30, 255])
     
-    # sunny day, minimal shadows:
-    lower_pavement = np.array([0, 9, 60])
-    upper_pavement = np.array([45, 30, 255])
+    # semi cloudy day
+    lower_pavement = np.array([0, 0, 115])
+    upper_pavement = np.array([179, 29, 255])
 
     mask = cv2.inRange(hsv, lower_pavement, upper_pavement)
     
@@ -95,9 +111,10 @@ def detect_pedestrian_lane(image):
     """
     return output
 
-def detect_obstacles(image,min_area=2000):
+def detect_obstacles(image,min_area=100, max_area=500):
+    global obstacle_count
+
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    
     # Define area of interest triangle/lane
     height = image.shape[0]
     width = image.shape[1]
@@ -108,11 +125,10 @@ def detect_obstacles(image,min_area=2000):
     ]
     
     mask_triangle = region_of_interest(gray, np.array([region_of_interest_vertices], np.int32))
-
     masked_image = cv2.bitwise_and(gray, mask_triangle)
-    cv2.imshow("frame2", masked_image)
-
     blur = cv2.GaussianBlur(masked_image, (5, 5), 0)
+
+    #blur = cv2.GaussianBlur(gray, (5, 5), 0)
     edges = cv2.Canny(blur, 50, 150)
 
     # Flip the image vertically
@@ -123,27 +139,43 @@ def detect_obstacles(image,min_area=2000):
         # Approximate the contour with a polygon
         epsilon = 0.1*cv2.arcLength(cnt,True)
         approx = cv2.approxPolyDP(cnt,epsilon,True)        
-        if len(approx) > 3 and cv2.contourArea(cnt) > min_area:
+        if len(approx) > 3 and (cv2.contourArea(cnt) > min_area) and cv2.contourArea(cnt) < max_area:
+            # Draw a red rectangle around a potential obstacle
             x, y, w, h = cv2.boundingRect(cnt)
+            output = cv2.drawContours(masked_image, cnt, 0, (255, 0, 0), 2)
+            cv2.imshow("Obstacle segmentation", output)
+
             cv2.rectangle(image, (x, y), (x+w, y+h), (0, 0, 255), 2)
-            print("*** Obstacle detected!")
-            # If obstacles are detected, write "STOP" on the frame
-            cv2.putText(image, "STOP", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+            # Increase the accuracy of obstacle detection by tracking the count every 3 seconds
+            obstacle_count += 1
+            # Confirm if the count is more than a threshold error value
+            if obstacle_count > 2:
+                obstacle_count = 0
+                print("*** Obstacle detected! *** Area = ", cv2.contourArea(cnt))
+                image = cv2.drawContours(image, cnt, 0, (255, 0, 255), 2)
+                # If obstacles are detected, write "STOP" on the frame
+                cv2.putText(image, "STOP", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
 
         # Detect stairs and ignore small contours
         # Check if the polygon is a rectangle with 4 vertices
-        if len(approx) == 4 and cv2.contourArea(cnt) > 1000:
+        if len(approx) == 4 and cv2.contourArea(cnt) > max_area:
             x, y, w, h = cv2.boundingRect(cnt)
             aspect_ratio = float(w)/h
             #print(aspect_ratio)
             # Check if the rectangle is roughly the size and shape of stairs
             if aspect_ratio > 2 and aspect_ratio < 7:
+                # Draw a yellow rectangle around potential stairs
                 cv2.rectangle(image, (x, y), (x+w, y+h), (0, 255, 255), 2)
-                # If stairs are detected, write "CLEAR" on the frame
-                cv2.putText(image, "STOP : STAIRS", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+                # Increase the accuracy of obstacle detection by tracking the count every 3 seconds
+                obstacle_count += 1
+                # Confirm if the count is more than a threshold error value
+                if obstacle_count > 5:
+                    obstacle_count = 0
+                    # If stairs are detected, write "CLEAR" on the frame
+                    cv2.putText(image, "STOP : STAIRS", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 255), 2)
+                    print("*** Stairs detected!")
 
         else:
-            print("*** No obstacle detected!")
             # If no obstacle is detected, write "CLEAR" on the frame
             cv2.putText(image, "CLEAR", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 2)
         
