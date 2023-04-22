@@ -32,7 +32,7 @@ int main(int argc, char **argv)
 	double robot_width = 0.6096;
 
 	double distance_correction = 1.0;
-	double angle_correction = 1.0875;
+	double angle_correction = 1.0;
 
 	int freq = 20;
 	ros::Rate timer(freq);

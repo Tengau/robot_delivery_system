@@ -40,7 +40,7 @@ estimated_pose = (0,0,0)
 
 obstacle = False
 
-def clamp(angle):
+def wrap(angle):
     if angle > 180:
         return angle - 360
     if angle < -180:
@@ -85,7 +85,7 @@ def handle_compass(msg):
     global compass_readings
     global compass_received_10
 
-    compass_readings[compass_count] = -clamp(msg.data + 20)
+    compass_readings[compass_count] = -wrap(msg.data + 20)
     compass_count = compass_count + 1
     
     if compass_count == 10:
@@ -185,15 +185,6 @@ def handle_occ_grid(msg):
                 return
     obstacleFree = True
     print("obstacle free?", obstacleFree)
-'''
-def move(v, w):
-    # if an obstacle is detected, dont move
-    if(obstacle):
-        v = 0
-        w = 0
-    command = '!'+ str(v) + '@' + str(w) + '#'
-    serial.write(command.encode('utf-8'))    
-    time.sleep(0.1)
 
 def angledif(point):
     x1, y1 = average_gps()
@@ -236,6 +227,15 @@ def movement(instructions):
             distance_to_go = distancedif(list_of_waypoints[i.to_index])
         
         move(0,0) #stop()
+'''
+
+def move(v, w):
+    # if an obstacle is detected, dont move
+    if(obstacle):
+        v = 0
+        w = 0
+    command = '!'+ str(v) + '@' + str(w) + '#'
+    serial.write(command.encode('utf-8'))    
 
 def target_angle():
     x1 = estimated_pose[0]
@@ -244,60 +244,60 @@ def target_angle():
     return math.atan2(y2 - y1, x2 - x1) * 180 / math.pi
     
 def orient():
-    while True:
-        angle = target_angle() - estimated_pose[2]
-        w = -angle * 0.25 / 180.0        
-        if w < 0.1 and w > 0:
-            w = 0.1
-        if w < 0 and w > -0.1:
-            w = -0.1
-        move(0,w)
-        print("pose:", estimated_pose)
-        if angle < 2 and angle > -2:
-            break
-            
+    angle = target_angle() - estimated_pose[2]
+    #print("angle", angle)
+    print(estimated_pose)
+    w = -angle * 0.01
+    
+    if w > 0.2:
+        w = 0.2
+    if w < -0.2:
+        w = -0.2
+    
+    if angle < 2 and angle > -2:
+        w = 0
+    return w
+        
 def calculate_distance():
     x1 = estimated_pose[0]
     y1 = estimated_pose[1]
     x2, y2 = destination
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            
-def translate():
-    count = 0
-    while True:
-        distance = calculate_distance()
-        v = distance * 0.25
-        if v > 0.25:
-            v = 0.25
-        if v < 0.1:
-            v = 0.1
-        move(v,0)
-        if distance < 0.05:
-            break
-        print("pose:",estimated_pose)
-        
-        count = count + 1
-        count = count % 30 
-        if count == 0:
-            orient()
-            
-def go_to_waypoint():
-     orient()
-     translate()
-     while(True):
-         move(0,0)
 
+def translate():
+    distance = calculate_distance()
+    #print("distance:",distance)
+    v = distance * 0.2
+    
+    if v > 0.2:
+        v = 0.2
+    if v < 0.1:
+        v = 0.1
+    
+    if distance < 0.05:
+        v = 0
+    return v
+    
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
-    rospy.Subscriber("path", Path, handle_path)
-    rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
+    #rospy.Subscriber("path", Path, handle_path)
+    #rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
     rospy.Subscriber("compass", Float64, handle_compass)
-    rospy.Subscriber("instructions", Instructions, handle_instructions)
+    #rospy.Subscriber("instructions", Instructions, handle_instructions)
     
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 2)    
+    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)
+
+    initial_orient = True
     
-    print("start")
-    go_to_waypoint()
-    
-    rospy.spin()
+    rate = rospy.Rate(10) # 10Hz
+    while not rospy.is_shutdown():
+        w = orient()
+        if w == 0:
+            initial_orient = False
+        if initial_orient:
+            v = 0
+        else:
+            v = translate()
+        move(v,w)
+        rate.sleep()
