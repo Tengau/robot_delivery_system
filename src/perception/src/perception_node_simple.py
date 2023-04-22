@@ -3,7 +3,7 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 import math
 
-pub = rospy.Publisher('obstacle', Bool, queue_size = 10)
+pub = rospy.Publisher('obstacle', Bool, queue_size = 2)
 obstacle = Bool()
 count = 0
 
@@ -15,10 +15,9 @@ def callback(data):
     # NDArray of angles and distances are collected:i
     for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
         # print("current angle: ", i, ": dist: ", data.ranges[i])
-        if(data.ranges[i] <= 1.5 and data.ranges[i] >= data.range_min): # if valid point and checks before 2 meters
+        if(data.ranges[i] <= 3.0 and data.ranges[i] >= data.range_min): # if valid point and checks before 2 meters
         #if(data.ranges[i] <= data.range_max and data.ranges[i] >= data.range_min): # if valid point
-            print("angle:", i)
-            if((60 < i) and (i < 120)):  # if obstacle in front
+            if((80 < i) and (i < 100)):  # if obstacle in front
                 obstacle.data = True
                 print("obstacle detected, stop command sent")
                 count = count + 1
@@ -26,7 +25,6 @@ def callback(data):
             else:
                 obstacle.data = False
                 #print("path clear so far")
-    #pub.publish(obstacle)
     if (obstacle.data == False):
         print("path clear so far-------------------")
     else:

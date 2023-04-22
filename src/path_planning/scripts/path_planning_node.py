@@ -22,7 +22,7 @@ locations = {
     4: (0,0)
 }
 
-destination = (3,0)
+destination = (8,0)
 
 list_of_waypoints = []
 instructions = []
@@ -143,7 +143,7 @@ def handle_occ_grid(msg):
 
     global obstacle
     obstacle = msg.data
-    print("ostacle?:", obstacle)
+    #print("obstacle:", obstacle)
 
     ''' Occupancy Grid stuff
     width = msg.info.width
@@ -246,13 +246,13 @@ def target_angle():
 def orient():
     while True:
         angle = target_angle() - estimated_pose[2]
-        w = -angle * 0.3 / 180.0        
-        if w < 0.15 and w > 0:
-            w = 0.15
-        if w < 0 and w > -0.15:
-            w = -0.15
+        w = -angle * 0.25 / 180.0        
+        if w < 0.1 and w > 0:
+            w = 0.1
+        if w < 0 and w > -0.1:
+            w = -0.1
         move(0,w)
-        #print("angle:", angle)
+        print("pose:", estimated_pose)
         if angle < 2 and angle > -2:
             break
             
@@ -266,15 +266,15 @@ def translate():
     count = 0
     while True:
         distance = calculate_distance()
-        v = distance * 0.3
-        if v > 0.3:
-            v = 0.3
+        v = distance * 0.25
+        if v > 0.25:
+            v = 0.25
         if v < 0.1:
             v = 0.1
         move(v,0)
         if distance < 0.05:
             break
-        #print("distance:",distance)
+        print("pose:",estimated_pose)
         
         count = count + 1
         count = count % 30 
@@ -289,13 +289,13 @@ def go_to_waypoint():
 
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
-    #rospy.Subscriber("path", Path, handle_path)
-    #rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
-    #rospy.Subscriber("compass", Float64, handle_compass)
-    #rospy.Subscriber("instructions", Instructions, handle_instructions)
+    rospy.Subscriber("path", Path, handle_path)
+    rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
+    rospy.Subscriber("compass", Float64, handle_compass)
+    rospy.Subscriber("instructions", Instructions, handle_instructions)
     
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)    
+    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 2)    
     
     print("start")
     go_to_waypoint()
