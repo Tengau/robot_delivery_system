@@ -7,7 +7,7 @@ import Adafruit_BBIO.UART as UART
 
 from nav_msgs.msg import Path, OccupancyGrid
 from geometry_msgs.msg import PoseStamped, Point
-from std_msgs.msg import Float64
+from std_msgs.msg import Float64, Bool
 from localization.msg import Instructions
 
 #UART setup 
@@ -22,7 +22,7 @@ locations = {
     4: (0,0)
 }
 
-destination = (0,1)
+destination = (8,0)
 
 list_of_waypoints = []
 instructions = []
@@ -38,9 +38,9 @@ gps_received_10 = False
 
 estimated_pose = (0,0,0)
 
-obstacleFree = True
+obstacle = False
 
-def clamp(angle):
+def wrap(angle):
     if angle > 180:
         return angle - 360
     if angle < -180:
@@ -59,7 +59,7 @@ def average_compass():
     if compass_received_10:
         return avg_com_helper(10)
     else:
-        if compass_count == 0
+        if compass_count == 0:
             return 0
         else:
             return avg_com_helper(compass_count)
@@ -85,7 +85,7 @@ def handle_compass(msg):
     global compass_readings
     global compass_received_10
 
-    compass_readings[compass_count] = -clamp(msg.data + 20)
+    compass_readings[compass_count] = -wrap(msg.data + 20)
     compass_count = compass_count + 1
     
     if compass_count == 10:
@@ -99,7 +99,7 @@ def handle_path(msg):
     global list_of_waypoints
     for pose in msg.poses:
         list_of_waypoints.append((pose.pose.position.x, pose.pose.position.y))
-    print(list_of_waypoints)
+    #print(list_of_waypoints)
     
 def handle_robot_pose(msg):
     global gps_readings
@@ -121,16 +121,31 @@ def handle_robot_pose(msg):
 def handle_estimated_pose(msg):
     global estimated_pose
     estimated_pose = (msg.x,msg.y,msg.z)
+    #print(msg.x,msg.y,msg.z)
 
 def handle_instructions(msg):
     global instructions
     instructions = msg.instructions
-    print(instructions)
+    #print(instructions)
     #while len(list_of_waypoints) == 0:
         #continue
     #movement(instructions)
 
 def handle_occ_grid(msg):
+    # checks for points in front of the robot
+    #    xxx|xxx
+    #     xx|xx
+    #      x|x 
+    # ------+-------
+    #       |
+    #       |
+    #       |
+
+    global obstacle
+    obstacle = msg.data
+    #print("obstacle:", obstacle)
+
+    ''' Occupancy Grid stuff
     width = msg.info.width
     height = msg.info.height
 
@@ -151,7 +166,7 @@ def handle_occ_grid(msg):
     print("Checking for obstacle...")
     global obstacleFree
     y_limit = 2/msg.info.resolution
-    x_limit = 1/msg.info.resolution
+    x_limit = 1 #/msg.info.resolution
     # note:
     # - need to doublecheck which direction the robot is going in
     # - need to double check width and height is--> just make sure its
@@ -170,15 +185,6 @@ def handle_occ_grid(msg):
                 return
     obstacleFree = True
     print("obstacle free?", obstacleFree)
-
-def move(v, w):
-    # if an obstacle is detected, dont move
-    if(!obstacleFree):
-        v = 0
-        #w = "0.0"
-    command = '!'+ str(v) + '@' + str(w) + '#'
-    serial.write(command.encode('utf-8'))    
-    time.sleep(0.1)
 
 def angledif(point):
     x1, y1 = average_gps()
@@ -221,6 +227,15 @@ def movement(instructions):
             distance_to_go = distancedif(list_of_waypoints[i.to_index])
         
         move(0,0) #stop()
+'''
+
+def move(v, w):
+    # if an obstacle is detected, dont move
+    if(obstacle):
+        v = 0
+        w = 0
+    command = '!'+ str(v) + '@' + str(w) + '#'
+    serial.write(command.encode('utf-8'))    
 
 def target_angle():
     x1 = estimated_pose[0]
@@ -229,48 +244,60 @@ def target_angle():
     return math.atan2(y2 - y1, x2 - x1) * 180 / math.pi
     
 def orient():
-    while True:
-        angle = target_angle() - average_compass()
-        w = angle * 0.4 / 180.0        
-        move(0,w)
-        if angle < 2 or angle > -2:
-            break
-            
+    angle = target_angle() - estimated_pose[2]
+    #print("angle", angle)
+    print(estimated_pose)
+    w = -angle * 0.01
+    
+    if w > 0.2:
+        w = 0.2
+    if w < -0.2:
+        w = -0.2
+    
+    if angle < 2 and angle > -2:
+        w = 0
+    return w
+        
 def calculate_distance():
     x1 = estimated_pose[0]
     y1 = estimated_pose[1]
     x2, y2 = destination
     return math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
-            
-def translate():
-    count = 0
-    while True:
-        distance = calculate_distance()
-        v = distance * 0.4
-        if v > 0.4:
-            v = 0.4
-        move(v,0)
-        if distance < 0.05:
-            break
-        
-        count = count + 1
-        count = count % 30 
-        if count == 0:
-            orient()
-            
- def go_to_waypoint():
-    orient()
-    translate()
 
+def translate():
+    distance = calculate_distance()
+    #print("distance:",distance)
+    v = distance * 0.2
+    
+    if v > 0.2:
+        v = 0.2
+    if v < 0.1:
+        v = 0.1
+    
+    if distance < 0.05:
+        v = 0
+    return v
+    
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
-    rospy.Subscriber("path", Path, handle_path)
-    rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
+    #rospy.Subscriber("path", Path, handle_path)
+    #rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
     rospy.Subscriber("compass", Float64, handle_compass)
-    rospy.Subscriber("instructions", Instructions, handle_instructions)
+    #rospy.Subscriber("instructions", Instructions, handle_instructions)
+    
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    rospy.Subscriber("/map", OccupancyGrid, handle_occ_grid)    
+    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)
+
+    initial_orient = True
     
-    go_to_waypoint()
-    
-    rospy.spin()
+    rate = rospy.Rate(10) # 10Hz
+    while not rospy.is_shutdown():
+        w = orient()
+        if w == 0:
+            initial_orient = False
+        if initial_orient:
+            v = 0
+        else:
+            v = translate()
+        move(v,w)
+        rate.sleep()

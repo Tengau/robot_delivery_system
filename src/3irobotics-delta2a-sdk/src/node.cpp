@@ -125,8 +125,7 @@ int main(int argc, char * argv[])
     ros::Time end_scan_time;
     double scan_duration;
 
-	start_scan_time = ros::Time::now();
-
+    start_scan_time = ros::Time::now();
     while (ros::ok())
     {
 		TLidarGrabResult result = robotics_lidar.getScanData();
@@ -157,7 +156,6 @@ int main(int argc, char * argv[])
 				end_scan_time = ros::Time::now();
 				scan_duration = (end_scan_time - start_scan_time).toSec() * 1e-3;
                 printf("Receive Lidar count %u!\n", lidar_scan_size);
-
                 //if successful, publish lidar scan
                 int start_node = 0, end_node = 359;
                 publish_scan(&scan_pub, &send_lidar_scan_data[0], lidar_scan_size,

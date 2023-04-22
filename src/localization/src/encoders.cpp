@@ -31,13 +31,15 @@ int main(int argc, char **argv)
 	double wheel_radius = 0.0419;
 	double robot_width = 0.6096;
 
+	double distance_correction = 1.0;
+	double angle_correction = 1.0;
+
 	int freq = 20;
 	ros::Rate timer(freq);
 	while (ros::ok()) {
 		int l= rc_encoder_eqep_read(2);
 		int r = -1*rc_encoder_eqep_read(3);
 
-		#std::cout << "left: " << l << " right: " << r << std::endl;  
 		
 		int dl = l - l_prev;
 		int dr = r - r_prev;
@@ -45,9 +47,11 @@ int main(int argc, char **argv)
 		double vl = dl * 2.0 * M_PI / 2200.0;
 		double vr = dr * 2.0 * M_PI / 2200.0;
 
-		double dx = wheel_radius * (vl + vr) * cos(theta) / 2.0; 
-		double dy = wheel_radius * (vl + vr)  * sin(theta) / 2.0;
-		double dtheta = wheel_radius * (vr - vl) / robot_width;
+		std::cout << "dl: " << dl << " dr: " << dr << std::endl;  
+		
+		double dx = distance_correction * wheel_radius * (vl + vr) * cos(theta) / 2.0; 
+		double dy = distance_correction *  wheel_radius * (vl + vr)  * sin(theta) / 2.0;
+		double dtheta = wheel_radius * (angle_correction * vr - vl) / robot_width;
 
 		//double dx = wheel_radius * vl * cos(theta); 
 		//double dy = wheel_radius * vl * sin(theta);
@@ -61,12 +65,12 @@ int main(int argc, char **argv)
 		else if (theta < -1*M_PI)	
 			theta += 2 * M_PI;
 
-		#std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180.0 / M_PI << std::endl;  
+		//std::cout << "x: " << x << " y: " << y << " theta: " << theta * 180.0 / M_PI << std::endl;  
  		
 		geometry_msgs::Point msg;
 		msg.x = x;
 		msg.y = y;
-		msg.z = theta
+		msg.z = theta * 180.0 / M_PI;
 		estimated_pose_publisher.publish(msg);
 		
 		l_prev = l;

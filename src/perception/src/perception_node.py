@@ -18,9 +18,9 @@ from collections import deque
 import numpy as np
 
 rospy.init_node('perception_node', anonymous=True)
-pub = rospy.Publisher('/map', OccupancyGrid, queue_size = 10)
+pub = rospy.Publisher('/map', OccupancyGrid, queue_size = None)
 
-
+grid = OccupancyGrid()
 
 EXTEND_AREA = 1.0
 
@@ -182,7 +182,7 @@ def generate_ray_casting_grid_map(ox, oy, xy_resolution, breshen=True):
                 ix, iy))  # line form the lidar to the occupied point
             for laser_beam in laser_beams:
                 # occupancy_map[x_point][y_point]
-                occupancy_map[laser_beam[0]][laser_beam[1]] = 0.0  # free area 0.0
+                occupancy_map[laser_beam[0]-1][laser_beam[1]-1] = 0.0  # free area 0.0
             occupancy_map[ix][iy] = 1.0  # occupied area 1.0
             occupancy_map[ix + 1][iy] = 1.0  # extend the occupied area
             occupancy_map[ix][iy + 1] = 1.0  # extend the occupied area
@@ -216,11 +216,13 @@ def callback(data):
     print("received data:")
     global angles
     global distances
-
+    global grid
     angles = []
     distances = []
     # NDArray of angles and distances are collected:
-    for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
+    print(data.ranges)
+    for i in range(int((1.74533 - 1.39626) / data.angle_increment)):
+    #for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
         if(data.ranges[i] <= data.range_max and data.ranges[i] >= data.range_min): 
             # print(i, ": ", data.range_max, data.ranges[i], data.intensities[i])
             angles.append(float(i * data.angle_increment))
@@ -242,34 +244,38 @@ def callback(data):
     occupancy_map = (occupancy_map*100).astype(np.int8)
     print("measuring points between", data.range_min, "and", data.range_max) 
     
-    grid = OccupancyGrid()
+
     grid.info.resolution = xy_resolution
     grid.info.width = xy_res[1]
     grid.info.height = xy_res[0]
     # calculate offset 
     print("center", center_x, center_y)
     print("res", xy_res[1], xy_res[0])
-    grid.info.origin.position.x = center_x
+    grid.info.origin.position.x = -center_x*xy_resolution
     #row_to_x(center_x, xy_resolution)
     #grid.info.origin.position.x = row_to_x(xy_res[1], (xy_res[1])/2-center_x, xy_resolution)
     
-    grid.info.origin.position.y = center_y
+    grid.info.origin.position.y = -center_y*xy_resolution
     #col_to_y(center_y, xy_resolution)
 
     #grid.info.origin.position.y = col_to_y(xy_res[0], (xy_res[0])/2-center_y, xy_resolution)
     grid.header.frame_id = "world"
-
+    grid_temp = []
     #print("occupancy map:", occupancy_map, len(occupancy_map))
     for i in range(xy_res[0]):
         for j in range(xy_res[1]):
-            grid.data.append(occupancy_map[i][j])
+            grid_temp.append(occupancy_map[i][j])
             #print(occupancy_map[i][j])
-    pub.publish(grid)
-    print("occupancy grid is published")
+    grid.data = grid_temp
 
 def main():
     rospy.Subscriber("scan", LaserScan, callback)
-    rospy.spin()
+    rate = rospy.Rate(10)
+    while not rospy.is_shutdown():
+        pub.publish(grid)
+        print("occupancy grid is published")
+        rate.sleep()
+
 
 if __name__ == '__main__':
     main()
