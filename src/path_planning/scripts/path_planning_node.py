@@ -40,7 +40,7 @@ estimated_pose = (0,0,0)
 
 obstacle = False
 
-def clamp(angle):
+def wrap(angle):
     if angle > 180:
         return angle - 360
     if angle < -180:
@@ -85,7 +85,7 @@ def handle_compass(msg):
     global compass_readings
     global compass_received_10
 
-    compass_readings[compass_count] = -clamp(msg.data + 20)
+    compass_readings[compass_count] = -wrap(msg.data + 20)
     compass_count = compass_count + 1
     
     if compass_count == 10:
@@ -186,15 +186,6 @@ def handle_occ_grid(msg):
     obstacleFree = True
     print("obstacle free?", obstacleFree)
 
-def move(v, w):
-    # if an obstacle is detected, dont move
-    if(obstacle):
-        v = 0
-        w = 0
-    command = '!'+ str(v) + '@' + str(w) + '#'
-    serial.write(command.encode('utf-8'))    
-    #time.sleep(0.1)
-
 def angledif(point):
     x1, y1 = average_gps()
     x2, y2 = point
@@ -237,7 +228,15 @@ def movement(instructions):
         
         move(0,0) #stop()
 '''
-        
+
+def move(v, w):
+    # if an obstacle is detected, dont move
+    if(obstacle):
+        v = 0
+        w = 0
+    command = '!'+ str(v) + '@' + str(w) + '#'
+    serial.write(command.encode('utf-8'))    
+
 def target_angle():
     x1 = estimated_pose[0]
     y1 = estimated_pose[1]
@@ -247,11 +246,13 @@ def target_angle():
 def orient():
     angle = target_angle() - estimated_pose[2]
     #print("angle", angle)
-    w = -angle * 0.3 / 180.0        
-    if w < 0.15 and w > 0:
-        w = 0.15
-    if w < 0 and w > -0.15:
-        w = -0.15
+    w = -angle * 0.01
+    
+    if w > 0.3:
+        w = 0.3
+    if w < -0.3:
+        w = -0.3
+    
     if angle < 2 and angle > -2:
         w = 0
     return w
@@ -266,10 +267,12 @@ def translate():
     distance = calculate_distance()
     print("distance:",distance)
     v = distance * 0.3
+    
     if v > 0.3:
         v = 0.3
     if v < 0.1:
         v = 0.1
+    
     if distance < 0.05:
         v = 0
     return v
@@ -292,10 +295,10 @@ if __name__ == "__main__":
     rate = rospy.Rate(10) # 10Hz
     while not rospy.is_shutdown():
         w = orient()
+        if w == 0:
+            initial_orient = False
         if initial_orient:
             v = 0
-            if w == 0:
-                initial_orient = False
         else:
             v = translate()
         move(v,w)
