@@ -7,7 +7,7 @@ import Adafruit_BBIO.UART as UART
 
 from nav_msgs.msg import Path, OccupancyGrid
 from geometry_msgs.msg import PoseStamped, Point
-from std_msgs.msg import Float64, Bool
+from std_msgs.msg import Float64, Bool, String
 from localization.msg import Instructions
 
 #UART setup 
@@ -278,6 +278,15 @@ def translate():
         v = 0
     return v
     
+def handle_image_info(msg):
+    global obstacle
+    if msg.data == "STOP":
+        obstacle = True
+    if msg.data == "CLEAR":
+        obstacle = False
+    #if msg.data == "STAIRS":
+       # obstacle = True
+
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
     #rospy.Subscriber("path", Path, handle_path)
@@ -286,7 +295,8 @@ if __name__ == "__main__":
     #rospy.Subscriber("instructions", Instructions, handle_instructions)
     
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)
+    #rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)
+    rospy.Subscriber("image_info", String, handle_image_info)
 
     initial_orient = True
     

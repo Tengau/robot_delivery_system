@@ -11,6 +11,7 @@ pub = rospy.Publisher('image_info', String, queue_size=10)
 obstacle_count = 0
 start_time = time.time()
 
+
 def main():
     # Define a video capture object
     #vid = cv2.VideoCapture(r'D:\Academics\SPRING 2023\ECE349\Senior-design\test-videos\2.MOV')
@@ -176,3 +177,5 @@ def detect_obstacles(image,min_area=100, max_area=500):
        
     return image
 
+if __name__ == "__ main__":
+    main()
