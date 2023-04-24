@@ -1,9 +1,14 @@
+#!/usr/bin/env python3
+
 import cv2
 import time
 import numpy as np
 import rospy
 from std_msgs.msg import String
 
+print(cv2.__version__)
+
+print("files imported")
 # Initialize ROS node and publisher
 rospy.init_node('image_processing', anonymous=True)
 pub = rospy.Publisher('image_info', String, queue_size=10)
@@ -52,7 +57,9 @@ def main():
     # Destroy all the windows
     cv2.destroyAllWindows()
 
-def detect_pedestrian_lane(image, pub):
+def detect_pedestrian_lane(image):
+    global pub
+
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
     
     # cloudy day, no shadows:
@@ -81,11 +88,12 @@ def detect_pedestrian_lane(image, pub):
     
     
     # Find contours from the mask
-    contours, hierarchy = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy, _ = cv2.findContours(mask.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     max_contour = []
     
     max_area = 0
     for contour in contours:
+        print(contour.shape)
         current_area = cv2.contourArea(contour)
         if (current_area > max_area):
             max_area = current_area
@@ -133,7 +141,7 @@ def detect_obstacles(image,min_area=100, max_area=500):
     # Flip the image vertically
     # gray = cv2.flip(gray, 1)
 
-    contours, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy, _ = cv2.findContours(edges, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     for cnt in contours:
         # Approximate the contour with a polygon
         epsilon = 0.1*cv2.arcLength(cnt,True)
@@ -177,5 +185,6 @@ def detect_obstacles(image,min_area=100, max_area=500):
        
     return image
 
-if __name__ == "__ main__":
-    main()
+
+print("running main")
+main()
