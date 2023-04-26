@@ -9,7 +9,7 @@ def main():
 
     # Open the serial port
     ser = serial.Serial(serial_port, baud_rate)
-    print("ultrasounds are connected...")
+    print("Ultrasounds are connected successfully...")
 
     # num_us = 1
     us_pub = rospy.Publisher('ultrasound_publisher', FloatArray)
@@ -18,25 +18,37 @@ def main():
 
 
     while not rospy.is_shutdown():
-        print("ultrasound loop is running...")
+        print("Ultrasound loop is running...")
         # Read the distance measurement from the Arduino
         distance = ser.readline().strip()
-        print(distance)
         distance = str(distance) # Make it a string
         distance = distance.split(": ")[1].split(", ")
-        distance[1] = distance[:-1]
+
+
+
+        '''
+        Ultrasound loop is running...
+        ['20.00', "16.00'"] 
+        '''
+
+
+        #print(distance)
+
+       
+        distance[1] = distance[1][:-1]
         
-    
+#        print(distance)
         # Object is  ['0.00', ['0.00']]  cm away.
 
-        distance2 = [int(float(distance[0])),int(float(distance[1][0]))]
+        distance2 = [float(distance[0]),float(distance[1])]
+
+        # Print the distance measurement
+        # Left US(Motor 4) - distance2[1], Right US(Motor 2) - distance2[0]
+        #print("Object is ",distance2," cm away.")
+    
 
         # Print the distance measurement
         print("Object is ",distance2," cm away.")
-        
-
-        # Print the distance measurement
-        # print("Object is ",distance," cm away.")
        
         # distance = Object is  b'Distances: 0.00, 0.00'  cm away.
         # for future array implementation:
@@ -45,7 +57,7 @@ def main():
         
 
         msg = FloatArray()
-        msg.data = [distance]
+        msg.data = [distance2]
         us_pub.publish(msg)
 
         r.sleep() # Wait for the next cycle

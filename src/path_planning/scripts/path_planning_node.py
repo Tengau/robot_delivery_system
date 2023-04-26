@@ -5,7 +5,7 @@ import math
 import serial
 import Adafruit_BBIO.UART as UART
 
-from nav_msgs.msg import Path, OccupancyGrid
+from nav_msgs.msg import Path#, OccupancyGrid
 from geometry_msgs.msg import PoseStamped, Point
 from std_msgs.msg import Float64, Bool, String
 from localization.msg import Instructions
@@ -22,10 +22,11 @@ locations = {
     4: (0,0)
 }
 
-destination = (8,0)
+destination = (0,0)
 
-list_of_waypoints = []
-instructions = []
+waypoints = [(1,1), (1,-1), (0,0)]
+
+#instructions = []
 
 compass_readings = [0,0,0,0,0,0,0,0,0,0]
 compass_count = 0
@@ -37,8 +38,13 @@ gps_count = 0
 gps_received_10 = False
 
 estimated_pose = (0,0,0)
+initial_orient = True
 
 obstacle = False
+#lane_clear = False
+#stop_handling = False
+#current_time = 0
+#start_time = 0
 
 def wrap(angle):
     if angle > 180:
@@ -131,7 +137,7 @@ def handle_instructions(msg):
         #continue
     #movement(instructions)
 
-def handle_occ_grid(msg):
+def handle_obstacles(msg):
     # checks for points in front of the robot
     #    xxx|xxx
     #     xx|xx
@@ -143,9 +149,10 @@ def handle_occ_grid(msg):
 
     global obstacle
     obstacle = msg.data
-    #print("obstacle:", obstacle)
+    print("obstacle:", obstacle)
 
-    ''' Occupancy Grid stuff
+'''
+    Occupancy Grid stuff
     width = msg.info.width
     height = msg.info.height
 
@@ -231,7 +238,7 @@ def movement(instructions):
 
 def move(v, w):
     # if an obstacle is detected, dont move
-    if(obstacle):
+    if(obstacle): # or not lane_clear):
         v = 0
         w = 0
     command = '!'+ str(v) + '@' + str(w) + '#'
@@ -246,14 +253,17 @@ def target_angle():
 def orient():
     angle = target_angle() - estimated_pose[2]
     #print("angle", angle)
-    print(estimated_pose)
     w = -angle * 0.01
     
     if w > 0.2:
         w = 0.2
     if w < -0.2:
         w = -0.2
-    
+    if w > 0 and w < 0.75:
+        w = 0.075
+    if w < 0 and w > -0.075:
+        w = -0.075
+
     if angle < 2 and angle > -2:
         w = 0
     return w
@@ -276,16 +286,54 @@ def translate():
     
     if distance < 0.05:
         v = 0
-    return v
+        
+        global initial_orient
+        initial_orient = True
+       
+        global waypoints
+        if len(waypoints) > 0
+        waypoints.pop(0)
     
-def handle_image_info(msg):
-    global obstacle
+    return v
+'''
+def handle_image_info_lane(msg):
+    global lane_clear#, stop_handling, start_time, current_state
+    #if stop_handling:
+    #    current_time = time.time()
+    #    if (current_time - start_time) > 0:
+    #        stop_handling = False
+    #    return
     if msg.data == "STOP":
+    #    start_time = time.time()
+        lane_clear = False
+        # set stop_handling to true
+     #   stop_handling = True
+
+    if msg.data == "CLEAR":
+        lane_clear = True
+    #if msg.data == "STAIRS":
+    #   obstacle = True
+
+
+
+def handle_image_info(msg):
+    global obstacle#, stop_handling, start_time, current_state
+    #if stop_handling:
+    #    current_time = time.time()
+    #    if (current_time - start_time) > 0:
+    #        stop_handling = False
+    #    return
+    if msg.data == "STOP":
+    #    start_time = time.time()
         obstacle = True
+        # set stop_handling to true
+     #   stop_handling = True
+
     if msg.data == "CLEAR":
         obstacle = False
     #if msg.data == "STAIRS":
-       # obstacle = True
+    #   obstacle = True
+'''
 
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
@@ -295,13 +343,20 @@ if __name__ == "__main__":
     #rospy.Subscriber("instructions", Instructions, handle_instructions)
     
     rospy.Subscriber("estimated_pose", Point, handle_estimated_pose)
-    #rospy.Subscriber("obstacle", Bool, handle_occ_grid, queue_size = 1, buff_size = 2**24)
-    rospy.Subscriber("image_info", String, handle_image_info)
-
-    initial_orient = True
+    rospy.Subscriber("obstacle", Bool, handle_obstacles, queue_size = 1, buff_size = 2**24)
+    #rospy.Subscriber("image_info", String, handle_image_info)
+    #rospy.Subscriber("image_info_lane", String, handle_image_info_lane)
     
+    
+    #global waypoints
+    #global destination
+
     rate = rospy.Rate(10) # 10Hz
     while not rospy.is_shutdown():
+        print(estimated_pose)
+        if len(waypoints) > 0:
+            destination = waypoints[0]
+        
         w = orient()
         if w == 0:
             initial_orient = False
