@@ -14,19 +14,9 @@ from localization.msg import Instructions
 UART.setup("UART5")
 serial = serial.Serial(port = '/dev/ttyO5', baudrate = 9600 )
 
-locations = {
-    0: (0,0),
-    1: (0,0),
-    2: (0,0),
-    3: (0,0),
-    4: (0,0)
-}
-
-
 destination = (0,0)
 
-waypoints = [(20,0)]
-#waypoints = [(1,1), (1,-1), (0,0)]
+waypoints = []
 
 #instructions = []
 
@@ -41,6 +31,7 @@ gps_received_10 = False
 
 estimated_pose = (0,0,0)
 initial_orient = True
+journey_started = False
 
 obstacle = False
 #lane_clear = False
@@ -104,10 +95,10 @@ def handle_compass(msg):
     #print("compass:",average_compass())
 
 def handle_path(msg):
-    global list_of_waypoints
+    global waypoints
     for pose in msg.poses:
-        list_of_waypoints.append((pose.pose.position.x, pose.pose.position.y))
-    #print(list_of_waypoints)
+        waypoints.append((pose.pose.position.x, pose.pose.position.y))
+    print("path planning:",waypoints)
     
 def handle_robot_pose(msg):
     global gps_readings
@@ -339,8 +330,10 @@ def handle_image_info(msg):
 
 if __name__ == "__main__":
     rospy.init_node("motion_commands")
-    #rospy.Subscriber("path", Path, handle_path)
-    #rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
+    rospy.Subscriber("path", Path, handle_path)
+    
+    print("path planning: path subcriber should be ready?")
+    rospy.Subscriber("robot_pose", PoseStamped, handle_robot_pose)
     rospy.Subscriber("compass", Float64, handle_compass)
     #rospy.Subscriber("instructions", Instructions, handle_instructions)
     
@@ -349,12 +342,12 @@ if __name__ == "__main__":
     #rospy.Subscriber("image_info", String, handle_image_info)
     #rospy.Subscriber("image_info_lane", String, handle_image_info_lane)
     
-    
-    #global waypoints
-    #global destination
-
     rate = rospy.Rate(10) # 10Hz
     while not rospy.is_shutdown():
+        
+        # trying to see if i can kill all nodes through python 
+        
+        
         #print(estimated_pose)
         if len(waypoints) > 0:
             destination = waypoints[0]
