@@ -24,7 +24,8 @@ locations = {
 
 destination = (0,0)
 
-waypoints = [(1,1), (1,-1), (0,0)]
+waypoints = [(20,0)]
+#waypoints = [(1,1), (1,-1), (0,0)]
 
 #instructions = []
 
@@ -251,18 +252,18 @@ def target_angle():
     return math.atan2(y2 - y1, x2 - x1) * 180 / math.pi
     
 def orient():
-    angle = target_angle() - estimated_pose[2]
-    #print("angle", angle)
+    angle = wrap(target_angle() - estimated_pose[2])
+    print("angle", angle)
     w = -angle * 0.01
     
     if w > 0.2:
         w = 0.2
     if w < -0.2:
         w = -0.2
-    if w > 0 and w < 0.75:
-        w = 0.075
-    if w < 0 and w > -0.075:
-        w = -0.075
+    if w > 0 and w < 0.1:
+        w = 0.1
+    if w < 0 and w > -0.1:
+        w = -0.1
 
     if angle < 2 and angle > -2:
         w = 0
@@ -276,7 +277,7 @@ def calculate_distance():
 
 def translate():
     distance = calculate_distance()
-    #print("distance:",distance)
+    print("distance:",distance)
     v = distance * 0.2
     
     if v > 0.2:
@@ -291,8 +292,8 @@ def translate():
         initial_orient = True
        
         global waypoints
-        if len(waypoints) > 0
-        waypoints.pop(0)
+        if len(waypoints) > 0:
+            waypoints.pop(0)
     
     return v
 '''
@@ -353,7 +354,7 @@ if __name__ == "__main__":
 
     rate = rospy.Rate(10) # 10Hz
     while not rospy.is_shutdown():
-        print(estimated_pose)
+        #print(estimated_pose)
         if len(waypoints) > 0:
             destination = waypoints[0]
         
