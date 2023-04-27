@@ -12,8 +12,8 @@ def main():
     print("ultrasounds are connected...")
 
     # num_us = 1
-    us_pub = rospy.Publisher('ultrasound_publisher', FloatArray)
-    rospy.init_node('ultrasound_node', anonymous=True)
+    us_pub = rospy.Publisher('ultrasonic_info', FloatArray)
+    rospy.init_node('ultrasonic_node', anonymous=True)
     r = rospy.Rate(10)
 
 

@@ -22,7 +22,7 @@ locations = {
     4: (0,0)
 }
 
-destination = (8,0)
+destination = (3,0)
 
 list_of_waypoints = []
 instructions = []
@@ -39,6 +39,9 @@ gps_received_10 = False
 estimated_pose = (0,0,0)
 
 obstacle = False
+stop_handling = False
+current_time = 0
+start_time = 0
 
 def wrap(angle):
     if angle > 180:
@@ -143,7 +146,7 @@ def handle_occ_grid(msg):
 
     global obstacle
     obstacle = msg.data
-    #print("obstacle:", obstacle)
+    print("obstacle:", obstacle)
 
     ''' Occupancy Grid stuff
     width = msg.info.width
@@ -246,7 +249,7 @@ def target_angle():
 def orient():
     angle = target_angle() - estimated_pose[2]
     #print("angle", angle)
-    print(estimated_pose)
+    print("estimated pose", estimated_pose)
     w = -angle * 0.01
     
     if w > 0.2:
@@ -277,11 +280,20 @@ def translate():
     if distance < 0.05:
         v = 0
     return v
-    
+
 def handle_image_info(msg):
-    global obstacle
+    global obstacle, stop_handling, start_time, current_time
+    if stop_handling:
+        current_time = time.time()
+        if (current_time - start_time) > 3:
+            stop_handling = False
+        return
     if msg.data == "STOP":
+        start_time = time.time()
         obstacle = True
+        # set stop_handling to true
+        stop_handling = True
+    
     if msg.data == "CLEAR":
         obstacle = False
     #if msg.data == "STAIRS":

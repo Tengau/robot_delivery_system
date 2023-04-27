@@ -221,8 +221,8 @@ def callback(data):
     distances = []
     # NDArray of angles and distances are collected:
     print(data.ranges)
-    for i in range(int((1.74533 - 1.39626) / data.angle_increment)):
-    #for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
+    #for i in range(int((1.74533 - 1.39626) / data.angle_increment)):
+    for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
         if(data.ranges[i] <= data.range_max and data.ranges[i] >= data.range_min): 
             # print(i, ": ", data.range_max, data.ranges[i], data.intensities[i])
             angles.append(float(i * data.angle_increment))
@@ -251,15 +251,15 @@ def callback(data):
     # calculate offset 
     print("center", center_x, center_y)
     print("res", xy_res[1], xy_res[0])
-    grid.info.origin.position.x = -center_x*xy_resolution
+    grid.info.origin.position.x = -center_y*xy_resolution
     #row_to_x(center_x, xy_resolution)
     #grid.info.origin.position.x = row_to_x(xy_res[1], (xy_res[1])/2-center_x, xy_resolution)
     
-    grid.info.origin.position.y = -center_y*xy_resolution
+    grid.info.origin.position.y = -center_x*xy_resolution
     #col_to_y(center_y, xy_resolution)
 
     #grid.info.origin.position.y = col_to_y(xy_res[0], (xy_res[0])/2-center_y, xy_resolution)
-    grid.header.frame_id = "world"
+    grid.header.frame_id = "laser"
     grid_temp = []
     #print("occupancy map:", occupancy_map, len(occupancy_map))
     for i in range(xy_res[0]):

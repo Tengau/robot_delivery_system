@@ -161,11 +161,12 @@ include_directories(
 
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
-catkin_install_python(PROGRAMS 	src/perception_node_simple.py 
-				src/perception_node.py 
-				src/practice.py 
+catkin_install_python(PROGRAMS 	src/perception_node_simple.py
+       				src/perception_lidar.py	
+				#src/perception_node.py 
+				src/webcam3.py
+				#src/practice.py 
 				src/b2a.py
-				src/temp_navigation_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

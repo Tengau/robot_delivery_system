@@ -1,44 +1,72 @@
+# perception_node_simple.py
+
 import rospy
-from sensor_msgs.msg import LaserScan
-from std_msgs.msg import Bool
-import math
-
-pub = rospy.Publisher('obstacle', Bool, queue_size = 2)
-obstacle = Bool()
+from std_msgs.msg import Bool, String
+from perception.msg import FloatArray
 count = 0
+lidar_obstacle = False
+webcam_obstacle = False
+lane_clear = True
+ultrasonic_obstacle = False
 
-def callback(data):
-    global obstacle, count
-    print("received data from lidar...")
+# handle lidar's obstacle message
+def handle_lidar_obstacle_info(msg):
+    global lidar_obstacle
+    lidar_obstacle = msg.data
 
-    # obstacle = Bool()
-    # NDArray of angles and distances are collected:i
-    for i in range(int((data.angle_max - data.angle_min) / data.angle_increment)):
-        # print("current angle: ", i, ": dist: ", data.ranges[i])
-        if(data.ranges[i] <= 3.0 and data.ranges[i] >= data.range_min): # if valid point and checks before 2 meters
-        #if(data.ranges[i] <= data.range_max and data.ranges[i] >= data.range_min): # if valid point
-            if((80 < i) and (i < 100)):  # if obstacle in front
-                obstacle.data = True
-                print("obstacle detected, stop command sent")
-                count = count + 1
-                return
-            else:
-                obstacle.data = False
-                #print("path clear so far")
-    if (obstacle.data == False):
-        print("path clear so far-------------------")
+# handle webcam lane info
+def handle_image_info_lane(msg):
+    global lane_clear
+    if msg.data == "LANE UNCLEAR":
+        lane_clear = False
+    if msg.data == "LANE CLEAR":
+        lane_clear = True
+
+# handle webcam obstacle
+def handle_image_info_obstacle(msg):
+    global webcam_obstacle
+    if msg.data == "CLEAR":
+        webcam_obstacle = False
+    if msg.data == "STOP":
+        webcam_obstacle = True
+
+def handle_ultrasonic_info(msg):
+    # handle ultrasonic
+    for i in msg.data:
+        if (i < 30):
+            ultrasonic_obstacle = True
+        else:
+            ultrasonic_obstacle = False
+
+def sensor_fusion():
+    # returns obstacle
+    # use priority to determine when to send stop and go
+    if(ultrasonic_obstacle):
+        return True
     else:
-        print("should not be here...")
-    count = count + 1
+        if (lane_clear and not lidar_obstacle):
+            return False
+        else:
+            return True
+
 
 def main():
     rospy.init_node('perception_node', anonymous=True)
-    rospy.Subscriber("scan", LaserScan, callback)
+    rospy.Subscriber("lidar_obstacle", Bool, handle_lidar_obstacle_info)
+    rospy.Subscriber("image_info_lane", String, handle_image_info_lane) 
+    rospy.Subscriber("image_info_obstacle", String, handle_image_info_obstacle)
+    #rospy.Subscriber("ultrasonic_info", FloatArray, handle_ultrasonic_info)
+
+    pub = rospy.Publisher('obstacle', Bool, queue_size=10)
+    
+    obstacle = Bool()   
     rate = rospy.Rate(2) # every second
+    # pause for 10 sec
     rospy.sleep(10)
     while not rospy.is_shutdown():
+        obstacle.data = sensor_fusion()
+        
         pub.publish(obstacle)
-        print(count)
         rate.sleep() # sleep for 1 second
 
     #rospy.spin()
