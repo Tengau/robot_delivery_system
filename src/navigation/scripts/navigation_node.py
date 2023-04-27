@@ -92,6 +92,14 @@ def gps_find(m):
 #gps_find(m)
 #m.save('./route_map.html')
 
+
+locations = {
+        "1" : (-2.22,-13.83),
+        "2" : (42.22,1.63),
+        "3" : (3.33,26.04)
+        
+        }
+
 def publish_msgs(lat1, lon1,lat2, lon2):
     print("Publishing waypoints and instructions")
     
@@ -153,4 +161,36 @@ def handle_gps(msg):
 if __name__ == '__main__':
     rospy.init_node('navigation_node')
     rospy.Subscriber("gps", Point, handle_gps)
+    
+    destination = rospy.get_param("/navigation_node/destination")
+   
+    if destination == "1":
+        waypoints = [(14.44,-4.07),(12.22,-17.9)]
+    if destination == "2":
+        waypoints = [(2.22,13.834),(-12.22,17.9)]
+    if destination == "3":
+        waypoints = []
+    if destination == "4":
+        waypoints = [(1,1),(1,-1),(0,0)]
+
+    path = Path()
+    path.header.stamp = rospy.get_rostime()
+    path.header.frame_id = "world"
+
+    # filling up the list
+    for waypoint in waypoints:
+        pose = PoseStamped()
+        pose.header.stamp = rospy.get_rostime()
+        pose.header.frame_id = "world"
+
+        pose.pose.position.x = waypoint[0]
+        pose.pose.position.y = waypoints[1]
+        pose.pose.orientation.w = 1
+
+        path.poses.append(pose)
+        
+    path_publisher.publish(path)
+    
+
+    
     rospy.spin()
