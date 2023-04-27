@@ -41,10 +41,14 @@ def handle_ultrasonic_info(msg):
 def sensor_fusion():
     # returns obstacle
     # use priority to determine when to send stop and go
+    # first check ultrasonic distance sensor
     if(ultrasonic_obstacle):
         return True
     else:
+        # check for lane clear and no lidar obstacles
         if (lane_clear and not lidar_obstacle):
+            if(webcam_obstacle):
+                return True
             return False
         else:
             return True
@@ -69,7 +73,6 @@ def main():
         pub.publish(obstacle)
         rate.sleep() # sleep for 1 second
 
-    #rospy.spin()
 
 if __name__ == '__main__':
     main()
