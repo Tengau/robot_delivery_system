@@ -22,9 +22,6 @@ def main():
     global start_time, obstacle_count
 
     # Define a video capture object
-    #vid = cv2.VideoCapture(r'D:/home/tenzi/Downloads/IMG_4378.MOV')
-
-            #D:\Academics\SPRING 2023\ECE349\Senior-design\test-videos\2.MOV')
     vid = cv2.VideoCapture(0)
     rospy.loginfo("VideoCapture defined successfully.")
 
@@ -34,10 +31,18 @@ def main():
         ret, frame = vid.read()
         #print("********* 1. Camera data read successfully *************")
         #print("********* 2. Lane detection in progress ... **********")
-        frame = detect_pedestrian_lane(frame)
+        try:
+            lane_frame = detect_pedestrian_lane(frame)
+            frame = lane_frame
+        except e:
+            print(e)
         #print("********* Lane detection done... **********")
         #print("********* 3. Obstacle detection in progress ... ********")
-        frame = detect_obstacles(frame)
+        try:
+            obstacle_frame = detect_obstacles(frame)
+            frame = obstacle_frame
+        except e:
+            print(e)
         #frame = detect_obstacles(frame, 1000, 2000)
         #print("********* Obstacle detection done ********")
 
@@ -96,6 +101,7 @@ def detect_pedestrian_lane(image):
     max_contour = [] 
     max_area = 0
     max_val = 0
+    x = y = w = h= None
     # find max contour
     for contour in contours:
         #print(contour.shape)
@@ -122,15 +128,13 @@ def detect_pedestrian_lane(image):
         pub_lane.publish("LANE UNCLEAR")
 
 
-
-    pts = np.float32([[x+w*.45, y+h*.01],[x + w *.55, y + h*.01],[x + w, y + h],[x, y + h]])
+    if(w is not None):
+        pts = np.float32([[x+w*.45, y+h*.01],[x + w *.55, y + h*.01],[x + w, y + h],[x, y + h]])
     # Draw rectangle around the lane
     #output = cv2.rectangle(image, (x,y), (x+w, y+h), (0, 255, 0), 2)
     # Draw green lane
     # output = cv2.fillPoly(image, [pts.astype(int)], (0,255,0))
 
-    # Publish a ROS message to a topic with the lane position
-    # pub.publish("Lane position: ({}, {})".format(x, y))
     return output
 
 def region_of_interest(img, vertices):
