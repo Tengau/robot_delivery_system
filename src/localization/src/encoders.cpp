@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
 	ros::Publisher estimated_pose_publisher = n.advertise<geometry_msgs::Point>("estimated_pose", 1000);
 	
-	ros::Subscriber compass_subscriber = n.subscribe("compass", 1, handle_compass);
+	//ros::Subscriber compass_subscriber = n.subscribe("compass", 1, handle_compass);
 
 	if (rc_encoder_eqep_init()){
 		std::cout << "Failed to initialize encoders" << std::endl;
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
 
 	double x = 0.0;
 	double y = 0.0;
-	double theta = get_initial_orientation();
+	double theta = 0.0; //get_initial_orientation();
 
 	double wheel_radius = 0.0419;
 	double robot_width = 0.6096;
