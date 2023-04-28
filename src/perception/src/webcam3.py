@@ -101,7 +101,7 @@ def detect_pedestrian_lane(image):
     max_contour = [] 
     max_area = 0
     max_val = 0
-    x = y = w = h= None
+    x = y = w = h = None
     # find max contour
     for contour in contours:
         #print(contour.shape)

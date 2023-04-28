@@ -14,7 +14,7 @@ def main():
     # num_us = 1
     us_pub = rospy.Publisher('ultrasonic_info', FloatArray, queue_size = 2)
     rospy.init_node('ultrasonic_node', anonymous=True)
-    r = rospy.Rate(2)
+    r = rospy.Rate(2) 
 
     while not rospy.is_shutdown():
         print("Ultrasound loop is running...")
