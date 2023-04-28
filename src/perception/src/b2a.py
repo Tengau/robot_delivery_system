@@ -4,7 +4,7 @@ from perception.msg import FloatArray
     
 def main():
     # Specify the serial port and baud rate
-    serial_port = '/dev/ttyACM0'
+    serial_port = '/dev/ttyACM1'
     baud_rate = 9600
 
     # Open the serial port

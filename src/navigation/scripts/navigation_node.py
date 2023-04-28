@@ -165,10 +165,11 @@ if __name__ == '__main__':
     if destination == 2:
         waypoints = [(2.22,13.834),(-12.22,17.9)]
     if destination == 3:
-        waypoints = []
+        waypoints = [(7.79, 4.5), (12.29,-3.26)]
     if destination == 4:
-        waypoints = [(1.0,1.0),(1.0,-1.0),(0.0,0.0)]
-    
+        #waypoints = [(0.0,2.0),(-1.0,1.0),(0.0,0.0)]
+        waypoints = [(1,1),(1,-1),(0,0)]
+
     path = Path()
     path.header.stamp = rospy.get_rostime()
     path.header.frame_id = "world"

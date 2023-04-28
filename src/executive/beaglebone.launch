@@ -2,7 +2,7 @@
 
 	<node type="path_planning_node.py" name="path_planning" pkg="path_planning" output="screen"/>
 	<node type="compass" name="compass_node" pkg="localization" /> 
-	<node type="encoders" name="encoders_node" pkg="localization" />  	
+	<node type="encoders" name="encoders_node" pkg="localization" output="screen"/>  	
 	<node type="gps.py" name="gps" pkg="localization" />
 
 	<node type="robot_pose.py" name="robot_pose_node" pkg="localization"/>

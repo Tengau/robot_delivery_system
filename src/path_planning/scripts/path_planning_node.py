@@ -233,7 +233,7 @@ def move(v, w):
     # if an obstacle is detected, dont move
     if(obstacle): # or not lane_clear):
         v = 0
-        w = 0
+        #w = 0
     command = '!'+ str(v) + '@' + str(w) + '#'
     serial.write(command.encode('utf-8'))    
 
